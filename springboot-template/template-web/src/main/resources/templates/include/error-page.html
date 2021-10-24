@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<body th:fragment="commonErrorPage(code, message)">
+	<style>
+		@import url(//fonts.googleapis.com/earlyaccess/notosanstc.css);
+		
+		body {
+			font-family: "Noto Sans TC", "Source Sans Pro", Calibri, Candara, Arial,
+				sans-serif !important;
+			margin: 0;
+			height: 100%;
+			background-color: #333;
+			color: #fff;
+			text-align: center;
+			text-shadow: 0 1px 3px rgba(0, 0, 0, .5);
+			font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			font-size: 14px;
+			line-height: 1.42857143;
+		}
+		
+		.site-wrapper {
+			display: table;
+			width: 100%;
+			height: 100%;
+			min-height: 100%;
+			-webkit-box-shadow: inset 0 0 100px rgba(0, 0, 0, .5);
+			box-shadow: inset 0 0 100px rgba(0, 0, 0, .5);
+		}
+		
+		.fixed-bottom {
+			position: fixed;
+			height: 30px;
+			bottom: 0;
+			width: 100%;
+			margin: 0 aut0;
+			text-align: center;
+		}
+		
+		.site-inner {
+			vertical-align: middle;
+			display: table-cell;
+		}
+		
+		h1 {
+			font-family: "Noto Sans TC", "Source Sans Pro", Calibri, Candara, Arial,
+				sans-serif !important;
+			font-size: 36px;
+		}
+		
+		h2 {
+			font-family: "Noto Sans TC", "Source Sans Pro", Calibri, Candara, Arial,
+				sans-serif !important;
+			margin-bottom: 20px;
+			font-size: 24px;
+			font-weight: 300;
+			line-height: 1.4;
+		}
+		
+		.button {
+			font-family: "Noto Sans TC", "Source Sans Pro", Calibri, Candara, Arial,
+				sans-serif !important;
+			position: relative;
+			border: none;
+			font-size: 20px;
+			color: #fff;
+			padding: 10px 30px;
+			margin: 20px 5px;
+			text-align: center;
+			-webkit-transition-duration: 0.4s;
+			transition-duration: 0.4s;
+			text-decoration: none;
+			overflow: hidden;
+			cursor: pointer;
+			display: inline-block;
+		}
+		
+		.button-green {
+			background-color: #4caf50;
+		}
+		
+		.button-blue {
+			background-color: #3a5fcd;
+		}
+		
+		.button:hover {
+			opacity: 0.8;
+			filter: alpha(opacity = 80);
+		}
+	</style>
+
+	<div class="site-wrapper">
+		<div class="site-inner">
+			<h1>
+				<b th:text="${code}">Error code</b>
+			</h1>
+			<h2 th:text="${message}"></h2>
+
+			<div>
+				<a class="button button-green" th:href="@{/}">
+					<i class="fas fa-fw fa-home"></i>
+					<span th:text="#{globalGoToHomepage}">Go Home</span>
+				</a>
+				<a class="button button-blue" th:href="@{/contact_us}">
+					<i class="fas fa-fw fa-comment-alt"></i>
+					<span th:text="#{globalContactUs}">Contact Us</span>
+				</a>
+			</div>
+
+		</div>
+	</div>
+</body>
+</html>

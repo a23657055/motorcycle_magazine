@@ -1,0 +1,27 @@
+<label>
+      <span id="imgLoading">
+       <i class="fas fa-spinner fa-spin"></i> 
+		<span th:text="#{dataLoading}" />
+      </span>
+</label>
+
+<label ng-if="total == 0">
+<span th:text="#{tableRowNoRecord}" />,
+</label>
+<label ng-if="total == 1">
+<span th:text="#{tableRowOneRecord}" />,
+</label>
+<label ng-if="total > 1">
+    <label th:text="#{tableRowTotalRecord('{{total}}')}"/> , 
+</label>
+<label>
+	<span th:text="#{tableRowDisplayStart}" />
+	<select size="1" ng-model="maxRows" ng-change="maxRowsChange()">
+			<option ng-value="5">5</option>
+			<option ng-value="10">10</option>
+			<option ng-value="25">25</option>
+			<option ng-value="50">50</option>
+			<option ng-value="100">100</option>
+	</select> 
+	<span th:text="#{tableRowDisplayEnd}" />
+</label>

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head th:replace="/include/head :: commonHead('sys')"></head>
+<script src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>
+<script src="https://unpkg.com/i18next/dist/umd/i18next.js"></script>
+<script type="text/javascript" th:src="@{/js/sys/s03.js}"></script>
+<style>
+	.style1{
+		width: 95%!important;
+		margin:0px 2.5% 0px 2.5%;
+	}
+
+</style>
+<body class="index-login" ng-controller="getAppController" id="body">
+
+	<div id="divArticle" class="container">
+	
+		</br>
+		
+		<h1 align="center" ng-click="changeDiv('article')">文章上傳系統</h1>
+		
+		</br>
+	
+		<div class="row">
+			<div class="thumbnail">
+				<div class="caption">
+					<img class="img-responsive" th:src="@{/images/icon_information.png}">
+					<h3 th:text="發表文章"></h3>
+				</div>
+			</div>
+		</div>
+		
+		</br>	
+		
+		
+		<table>
+			<tr>
+				<td>
+					類別：
+				</td>
+				<td>
+					<select id="category">
+						<option></option>
+    					<option ng-repeat="item in allitems">
+      						{{item.Name}}
+    					</option>
+					</select>
+				</td>
+			</tr>
+			
+			<tr>
+				<td>
+					標題：
+				</td>
+				<td>
+					<input id="title" type="text" style="height:2%">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					是否啟用：
+				</td>
+				<td>
+					<div class="form_group">
+						<div class="form_input form_input_search_half">
+							<toggle ng-model="IsEnable" ng-init="IsEnable=true"
+								th:on="#{toggleIsEnableTrue}"
+								th:off="#{toggleIsEnableFalse}"
+								onstyle="btn-success" offstyle="btn-danger"></toggle>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					生效日期：
+				</td>
+				<td>
+					<input type="date" id="releaseTimeArticle">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					</br>
+				</td>
+			</tr>
+		</table>
+		
+		<!-- 富文本編輯器 -->
+		<div id="div1">
+		
+		</div>
+		
+		</br>
+		
+		<table align="right" style="border-collapse:separate; border-spacing:10px 0px;">
+			<tr>
+				<td>
+					<button type="button">
+						<input class="button" type="button" value="立即發布" style="border:0" ng-click="submitNow()">
+					</button>
+				</td>
+				<td>
+					<button type="button">
+						<input class="button" type="button" value="提交" style="border:0" ng-click="submit('A')">
+					</button>
+				</td>
+			</tr>
+		</table>		
+	</div>
+	
+	<div id="divImage" class="container" style="display:none;">
+	
+		</br>
+			
+		<h1 align="center" ng-click="changeDiv('image')">圖片上傳系統</h1>
+			
+		</br>
+	
+		<div class="row">
+			<div class="thumbnail">
+				<div class="caption">
+					<img class="img-responsive" th:src="@{/images/icon_information.png}">
+					<h3 th:text="上傳圖片"></h3>
+				</div>
+			</div>
+		</div>
+		
+		</br>
+		
+		<table>
+			<tr>
+				<td>
+					位置：
+				</td>
+				<td>
+					<select id="location">
+						<option></option>
+    					<option ng-repeat="item in allLocation" label='{{item.locationDescription}}'>
+      						{{item.locationCode}}
+    					</option>
+					</select>
+				</td>
+			</tr>
+			
+			<tr>
+				<td>
+					是否啟用：
+				</td>
+				<td>
+					<div class="form_group">
+						<div class="form_input form_input_search_half">
+							<toggle ng-model="IsEnable" ng-init="IsEnable=true"
+								th:on="#{toggleIsEnableTrue}"
+								th:off="#{toggleIsEnableFalse}"
+								onstyle="btn-success" offstyle="btn-danger"></toggle>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					生效日期：
+				</td>
+				<td>
+					<input type="date" id="releaseTimeImage">
+				</td>
+			</tr>
+			<!--  <tr>
+				<td>
+					結束日期：
+				</td>
+				<td>
+					<input type="date" id="releaseTime">
+				</td>
+			</tr>-->
+			<tr>
+				<td>
+					圖片上傳：
+				</td>
+				<td>
+					<input type="file" name="file" id="img_upload_file" multiple="multiple"  /> 
+					<input type="hidden" name="img_upload_base" id="img_upload_base" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					圖片預覽：
+				</td>
+				<td>
+					<img id="img_upload_show" />
+				</td>
+			</tr>
+		</table>
+		
+		</br>
+		
+		<table align="right" style="border-collapse:separate; border-spacing:10px 0px;">
+			<tr>
+				<td>
+					<button type="button">
+						<input class="button" type="button" value="立即發布" style="border:0" ng-click="submitNow()">
+					</button>
+				</td>
+				<td>
+					<button type="button">
+						<input class="button" type="button" value="提交" style="border:0" ng-click="submit('I')">
+					</button>
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="footer_space"></div>
+	<footer th:replace="/include/footer :: commonFooter"></footer>
+	
+	
+</body>
+</html>

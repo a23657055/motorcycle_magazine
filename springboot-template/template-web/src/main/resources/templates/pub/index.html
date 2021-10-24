@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head th:replace="/include/head :: commonHead('pub')"></head>
+<script type="text/javascript" th:src="@{/js/pub/index.js}"></script>	
+<script	th:src="@{/plugins/countup.js}"></script>
+
+<body class="index-login" ng-controller="getAppController" id="body">
+	<nav th:replace="/include/navbar_common :: navbarCommon" id="body"></nav>
+	
+	<div class="container">
+		<div class="row">
+			<h1>Template Page : /pub/index</h1>
+
+		</div>
+	</div>
+
+	<footer th:replace="/include/footer :: commonFooter"></footer>
+</body>
+</html>

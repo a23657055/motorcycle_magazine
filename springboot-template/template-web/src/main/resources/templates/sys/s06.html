@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head th:replace="/include/head :: commonHead('sys')"></head>
+<script>
+	var actionCreateSaveBtn = [[${actionCreate}]];
+	var actionUpdateSaveBtn = [[${actionUpdate}]];
+</script>
+<script type="text/javascript" th:src="@{/js/sys/s06.js}"></script>
+<script th:src="@{/plugins/jquery.twzipcode.min.js}"></script>
+<body class="index-login" ng-controller="getAppController" id="body">
+	<nav th:replace="/include/navbar_common :: navbarCommon" id="body"></nav>
+
+	<div id="divQuery" class="container">
+		<div class="row">
+			<div class="thumbnail">
+				<div class="caption">
+					<img class="img-responsive" th:src="@{/images/icon_information.png}">
+					<h3 th:text="${appName}"></h3>
+				</div>
+			</div>
+		</div>
+
+		
+		<div class="row">
+			<div class="col-xs-12 shadow_board">
+				<form name="queryForm">
+					<div>
+						<div class="form_group">
+							<label for="QueryName" th:text="#{s06Name}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="QueryName" name="QueryName"
+									ng-model="QueryName" class="form-control"
+									th:placeholder="#{s06Name}"
+									autocomplete="off">
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="QueryCode" th:text="#{s06Code}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="QueryCode" name="QueryCode"
+									ng-model="QueryCode" class="form-control"
+									th:placeholder="#{s06Code}"
+									autocomplete="off">
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="QueryTel" th:text="#{s06Tel}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="QueryTel" name="QueryTel"
+									ng-model="QueryTel" class="form-control"
+									th:placeholder="#{s06Tel}"
+									autocomplete="off">
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="QueryFax" th:text="#{s06Fax}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="QueryFax" name="QueryFax"
+									ng-model="QueryFax" class="form-control"
+									th:placeholder="#{s06Fax}"
+									autocomplete="off">
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="QueryCity" th:text="#{s06City}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="QueryCity" name="QueryCity"
+									ng-model="QueryCity" class="form-control"
+									th:placeholder="#{s06City}"
+									autocomplete="off">
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="QueryTown" th:text="#{s06Town}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="QueryTown" name="QueryTown"
+									ng-model="QueryTown" class="form-control"
+									th:placeholder="#{s06Town}"
+									autocomplete="off">
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="QueryAddress" th:text="#{s06Address}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="QueryAddress" name="QueryAddress"
+									ng-model="QueryAddress" class="form-control"
+									th:placeholder="#{s06Address}"
+									autocomplete="off">
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="QueryOrgType" th:text="#{s06OrgType}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<select id="QueryOrgType" name="QueryOrgType"
+										ng-model="QueryOrgType" class="form-control col-xs-6">
+									<option value="" selected th:text="#{all}"></option>
+									<option value="0" th:text="#{s06OrgTypeOpt0}"></option>
+									<option value="1" th:text="#{s06OrgTypeOpt1}"></option>
+									<option value="2" th:text="#{s06OrgTypeOpt2}"></option>
+									<option value="3" th:text="#{s06OrgTypeOpt3}"></option>
+									<option value="4" th:text="#{s06OrgTypeOpt4}"></option>
+								</select>
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="QueryAuthType" th:text="#{s06AuthType}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<select id="QueryAuthType" name="QueryAuthType"
+									ng-model="QueryAuthType" class="form-control col-xs-6">
+									<option value="" selected th:text="#{all}"></option>
+									<option value="0" th:text="#{s06AuthTypeOpt0}"></option>
+									<option value="1" th:text="#{s06AuthTypeOpt1}"></option>
+									<option value="2" th:text="#{s06AuthTypeOpt2}"></option>
+								</select>
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="QueryIsEnable" th:text="#{isEnable}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<select id="QueryIsEnable" name="QueryIsEnable"
+									ng-model="QueryIsEnable" class="form-control col-xs-6">
+									<option value="" selected th:text="#{all}"></option>
+									<option value="true" th:text="#{isEnableTrue}"></option>
+									<option value="false" th:text="#{isEnableFalse}"></option>
+								</select>
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<div class="form_group"></div>
+					</div>
+					<div class="help-block"></div>
+					<div class="submit_bar">
+						<button class="btn btn_custom btn_blue" type="button" ng-click="queryData()">
+							<i class="fas fa-fw fa-search"></i>
+							<th:block th:text="#{btnSearch}"></th:block>
+						</button>
+						<button class="btn btn_custom btn_gray" type="button" ng-click="clearData()">
+							<i class="fas fa-fw fa-redo-alt"></i>
+							<th:block th:text="#{btnReset}"></th:block>
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="thumbnail">
+				<div class="caption">
+					<img class="img-responsive" th:src="@{/images/icon_search.png}">
+					<h3 th:text="#{globalSearchResult}"></h3>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12 col-md-6 no_padding">
+				<div class="help-block"></div>
+				<span th:replace="/include/table_row_select"></span>
+			</div>
+			<div class="col-xs-12 col-md-6 no_padding">
+				<a class="btn btn_custom btn_blue pull-right" type="button"
+						ng-click="openEdit()" th:if="${actionCreate}">
+					<i class="fas fa-fw fa-plus-circle"></i>
+					<th:block th:text="#{btnCreate}"></th:block>
+				</a>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="table-responsive">
+				<table class="table table-striped table-bordered table-hover table_customer table_gray">
+					<thead>
+						<tr>
+							<th width="25%"><a href="#" ng-click="setSortName('name')">
+								<th:block th:text="#{s06Name}"></th:block>
+								<i ng-show="sorttype != 'name'" class="fas fa-fw fa-sort text-muted"></i>
+								<i ng-show="sorttype == 'name' && !sortreverse" class="fas fa-fw fa-caret-down"></i>
+								<i ng-show="sorttype == 'name' && sortreverse" class="fas fa-fw fa-caret-up"></i>
+							</a></th>
+							<th width="20%"><span th:text="#{s06Code}"></span></th>
+							<th width="15%"><span th:text="#{s06OrgType}"></span></th>
+							<th width="15%"><span th:text="#{s06AuthType}"></span></th>
+							<!-- <th width="25%"><span th:text="#{s06Tel}"></span></th> -->
+							<!-- <th width="25%"><span th:text="#{s06Fax}"></span></th> -->
+							<th width="15%"><span th:text="#{isEnable}"><span></th>
+							<th width="10%"><span th:text="#{s06City}"></span></th>							
+							<!-- <th width="25%"><span th:text="#{s06Town}"></span></th> -->
+							<!-- <th width="25%"><span th:text="#{s06Address}"></span></th> -->
+							<th th:if="${actionUpdate && actionDelete}" class="func">&nbsp;</th>
+						</tr>
+					</thead>
+					<tbody>
+
+						<tr ng-repeat="item in allitems">
+							<td>{{item.Name}}</td>
+							<td>{{item.Code}}</td>
+							<td>
+								{{ item.OrgType==0?"[[#{s06OrgTypeName0}]]":""}}
+								{{ item.OrgType==1?"[[#{s06OrgTypeName1}]]":""}}
+								{{ item.OrgType==2?"[[#{s06OrgTypeName2}]]":""}}
+								{{ item.OrgType==3?"[[#{s06OrgTypeName3}]]":""}}
+								{{ item.OrgType==4?"[[#{s06OrgTypeName4}]]":""}}
+							</td>
+							<td>
+								{{ item.AuthType==0?"[[#{s06AuthTypeName0}]]":""}}
+								{{ item.AuthType==1?"[[#{s06AuthTypeName1}]]":""}}
+								{{ item.AuthType==2?"[[#{s06AuthTypeName2}]]":""}}
+							</td>
+							<td class="text-center">
+								<span ng-show="{{item.IsEnable}}">
+									<i class="far fa-fw fa-check-circle text-success" th:title="#{isEnableTrue}"></i>
+									<th:block th:text="#{isEnableTrue}"></th:block>
+								</span>
+								<span ng-show="{{!item.IsEnable}}">
+									<i class="fas fa-fw fa-minus-circle text-danger" th:title="#{isEanbleFalse}"></i>
+									<th:block th:text="#{isEnableFalse}"></th:block>
+								</span>
+							</td>
+							<!-- <td>{{item.Tel}}</td> -->
+							<!-- <td>{{item.Fax}}</td> -->
+							<td>{{item.City}}</td>
+							<!-- <td>{{item.Town}}</td> -->
+							<!-- <td>{{item.Address}}</td> -->
+							<td th:if="${actionUpdate && actionDelete}" class="text-center">
+								<a class="btn btn-sm btn-primary" ng-click="editData(item.Id);"
+										th:title="#{btnEdit}" th:if="${actionUpdate}">
+									<i class="fas fa-fw fa-edit"></i>
+									<th:block th:text="#{btnEdit}"></th:block>
+								</a>
+								<br />
+								<a href="#" class="btn btn-sm btn-info"
+										ng-click="deleteData(item.Id);" th:if="${actionDelete}">
+									<i class="far fa-fw fa-trash-alt"></i>
+									<th:block th:text="#{btnDelete}"></th:block>
+								</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			
+			<span th:replace="/include/table_row_empty"></span>
+			
+			<div class="text-center">
+				<paging class="pagination" page="currentPage" page-size="maxRows"
+					total="total" show-prev-next="true" show-first-last="true"
+					text-next-class="fas fa-step-forward"
+					text-prev-class="fas fa-step-backward"
+					text-first-class="fas fa-fast-backward"
+					text-last-class="fas fa-fast-forward"
+					paging-action="queryData(page)"></paging>
+			</div>
+		</div>
+	</div>
+
+	<div id="divEdit" class="container" ng-show="btnIns || btnUpd">
+		<div class="row">
+			<h4 class="form_heading form_heading_fix form_heading_gray"	ng-show="btnIns">
+				<big><i class="fas fa-fw fa-plus-circle fa-lg"></i></big>
+				<b th:text="#{btnCreate}"></b>
+			</h4>
+
+			<h4 class="form_heading form_heading_fix form_heading_gray" ng-show="btnUpd">
+				<big><i class="fas fa-fw fa-edit fa-lg"></i></big>
+				<b th:text="#{btnEdit}"></b>
+			</h4>
+
+			<div class="col-xs-12 shadow_board">
+				<form name="editForm">
+					<div>
+						<div class="form_group">
+							<label for="Name" class="form_label form_label_search form_label_gray">
+								<p style="font-size:10px; color:red; display:inline;">(*必填)</p>
+								<th:block th:text="#{s06Name}"></th:block>
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="Name" name="Name" ng-model="Name"
+									class="form-control" ng-maxlength="50"
+									th:placeholder="#{s06Name}"
+									autocomplete="off" ng-required="true">
+								<h5 class="text-danger" th:text="#{pleaseEnter}+#{s06Name}"
+									ng-show="editForm.Name.$error.required && editForm.Name.$dirty">
+								</h5>
+								<h5 class="text-danger" th:text="#{formatMaxLengthAfter(50)}"
+									ng-show="editForm.Name.$error.maxlength && editForm.Name.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="Code" class="form_label form_label_search form_label_gray">
+								<p style="font-size:10px; color:red; display:inline;">(*必填)</p>
+								<th:block th:text="#{s06Code}"></th:block>
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="Code" name="Code" ng-model="Code"
+									class="form-control" th:placeholder="#{s06Code}"
+									autocomplete="off" ng-required="true" ng-maxlength="16" />
+								<h5 class="text-danger" th:text="#{pleaseEnter}+#{s06Code}"
+									ng-show="editForm.Code.$error.required && editForm.Code.$dirty">
+								</h5>
+								<h5 class="text-danger" th:text="#{formatMaxLengthAfter(16)}"
+									ng-show="editForm.Code.$error.maxlength && editForm.Code.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<div class="form_group">
+							<label for="Tel" th:text="#{s06Tel}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="Tel" name="Tel" ng-model="Tel"
+									class="form-control" th:placeholder="#{s06Tel}"
+									autocomplete="off" ng-maxlength="15"
+									ng-pattern="/^0\d{1,2}-\d{6,10}/" />
+								<h5 class="text-danger" th:text="#{formatMaxLengthAfter(15)}"
+									ng-show="editForm.Tel.$error.maxlength && editForm.Tel.$dirty">
+								</h5>
+								<h5 class="validation-msg" th:text="#{phoneFormatErr}"
+									ng-show="editForm.Tel.$invalid && editForm.Tel.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<div class="form_group">
+							<label for="Fax" th:text="#{s06Fax}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="Fax" name="Fax" ng-model="Fax"
+									class="form-control" th:placeholder="#{s06Fax}"
+									autocomplete="off" ng-maxlength="15"
+									ng-pattern="/^0\d{1,2}-\d{6,10}/" />
+								<h5 class="text-danger" th:text="#{formatMaxLengthAfter(15)}"
+									ng-show="editForm.Fax.$error.maxlength && editForm.Fax.$dirty">
+								</h5>
+								<h5 class="validation-msg" th:text="#{phoneFormatErr}"
+									ng-show="editForm.Fax.$invalid && editForm.Fax.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+
+					<th:block th:if="${isApplyAdmin!=null && !isApplyAdmin}">
+					<div>
+						<div class="form_group">
+							<label for="OrgType" th:text="#{s06OrgType}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<select id="OrgType" name="OrgType" ng-model="OrgType"
+									ng-required="true" class="form-control col-xs-6" ng-change="changeOrgType();">																															
+									<option value="0" th:text="#{s06OrgTypeOpt0}"></option>
+									<option value="1" th:text="#{s06OrgTypeOpt1}"></option>
+									<option value="2" th:text="#{s06OrgTypeOpt2}"></option>									
+									<option value="3" th:text="#{s06OrgTypeOpt3}"></option>
+									<option value="4" th:text="#{s06OrgTypeOpt4}"></option>
+								</select>
+								<h5 class="text-danger" th:text="#{pleaseEnter}+#{s06ChooseOne}"
+									ng-show="editForm.OrgType.$error.required && editForm.OrgType.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<div class="form_group">
+							<label for="AuthType" th:text="#{s06AuthType}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<select id="AuthType" name="AuthType" ng-model="AuthType"
+									ng-required="true" class="form-control col-xs-6">
+									<option value="0" ng-show="authType0" th:text="#{s06AuthTypeOpt0}"></option>
+									<option value="1" ng-show="authType1" th:text="#{s06AuthTypeOpt1}"></option>
+									<option value="2" ng-show="authType2" th:text="#{s06AuthTypeOpt2}"></option>
+								</select>
+								<h5 class="text-danger" th:text="#{pleaseEnter}+#{s06ChooseOne}"
+									ng-show="editForm.AuthType.$error.required && editForm.AuthType.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+					</th:block>
+
+					<div class="form_group">
+						<label for="file" class="form_label form_label_search form_label_gray">
+							<p style="font-size:10px; color:red; display:inline;">(*必填)</p>
+							<th:block th:text="#{s06Address}"></th:block>
+						</label>
+						<div class="form_input form_input_search">
+							<label for="orgAddress" class="sr-only" th:text="#{orgAddress}"></label>
+							<div class="input-group">
+								<div id="twzipcode"></div>
+								<script>
+									$("#twzipcode").twzipcode({
+										"zipcodeIntoDistrict" : true,
+										"css" : ["city form-control",
+												"town form-control"],
+										"countyName" : "city",
+										"districtName" : "town"
+									});
+								</script>
+							</div>
+							<div>
+								<input type="text" id="orgAddress" name="orgAddress"
+									ng-model="Address" ng-maxlength="256" class="form-control"
+									th:placeholder="#{orgType4Address}"
+									autocomplete="off" ng-required="true">
+								<h5 class="text-danger" th:text="#{s06CityFormat}"
+									ng-show="editForm.orgCity.$error.required && editForm.orgCity.$dirty">
+								</h5>
+								<h5 class="text-danger" th:text="#{s06AddressFormat}"
+									ng-show="editForm.orgAddress.$error.required && editForm.orgAddress.$dirty">
+								</h5>
+								<h5 class="text-danger" th:text="#{s06AddressLengthFormat}"
+									ng-show="editForm.orgAddress.$error.maxlength && editForm.orgAddress.$dirty">
+								</h5>
+								<input type="text" id="orgCity" name="orgCity" ng-model="City"
+									ng-maxlength="10" class="form-control"
+									th:placeholder="#{s06City}" autocomplete="off"
+									ng-required="true" style="display: none;">
+								<input type="text" id="orgTown" name="orgTown" ng-model="Town"
+									ng-maxlength="10" class="form-control"
+									th:placeholder="#{s06Town}" autocomplete="off"
+									ng-required="true" style="display: none;">
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<div class="form_group">
+							<label for="IsEnable" th:text="#{isEnable}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search_half">
+								<toggle ng-model="IsEnable" ng-init="IsEnable=true"
+									th:on="#{toggleIsEnableTrue}"
+									th:off="#{toggleIsEnableFalse}"
+									onstyle="btn-success" offstyle="btn-danger"></toggle>
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<div class="form_group"></div>
+					</div>
+					<div class="help-block"></div>
+
+					<div class="submit_bar">
+						<button class="btn btn_custom btn_blue" type="button"
+							ng-click="!editForm.$valid || createData()"
+							ng-disabled="!editForm.$valid"
+							ng-show="LocalActionCreate && btnIns">
+							<i class="fas fa-fw fa-save"></i>
+							<th:block th:text="#{btnSave}"></th:block>
+						</button>
+						<button class="btn btn_custom btn_blue" type="button"
+							ng-click="!editForm.$valid || updateData()"
+							ng-disabled="!editForm.$valid"
+							ng-show="LocalActionUpdate && btnUpd">
+							<i class="fas fa-fw fa-save"></i>
+							<th:block th:text="#{btnSave}"></th:block>
+						</button>
+						<button class="btn btn_custom btn_gray" type="button" ng-click="closeEdit()">
+							<i class="fas fa-fw fa-undo"></i>
+							<th:block th:text="#{btnReturn}"></th:block>
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	<div class="footer_space"></div>
+	<footer th:replace="/include/footer :: commonFooter"></footer>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head th:replace="/include/head_index :: headIndex(#{globalResetCode})"></head>
+<script type="text/javascript">
+	var loginReset = "[[#{loginReset}]]";
+	var loginResetFail = "[[#{loginResetFail}]]";
+</script>
+<script type="text/javascript" th:src="@{/js/reset.js}"></script>	
+
+<body ng-app="myApp">
+	<nav th:replace="/include/navbar_home :: navbarHome"></nav>
+	<div class="jumbotron banner">
+		<div class="bn-bg">
+			<img class="img-responsive bn-photo" th:src="@{/images/bn.png}">
+			<img class="img-responsive bn-cover" th:src="@{/images/bn-cover.png}">
+		</div>
+		<div class="bn-title">
+			<h1 style="font-size: 2.25rem" th:text="#{globalMainRegion}"></h1>
+			<h1 th:text="#{globalMainTitle}"></h1>
+		</div>
+	</div>
+	
+	<div ng-controller="getAppController" class="container">
+		<div class="row">
+			<div class="col-sm-offset-3 col-sm-6 shadow_board">
+				<div class="thumbnail">
+					<div class="caption">
+						<img class="img-responsive"	th:src="@{/images/icon_profiles.png}">
+						<h3 th:text="#{globalResetCode}">
+						</h3>
+					</div>
+				</div>
+				<form name="myForm">
+					<div>
+						<div class="form_group">
+							<label for="userName" th:text="#{loginName}"
+									class="form_label form_label_gray">
+							</label>
+							<div class="form_input">
+								<input type="text" id="userName" name="userName"
+									ng-model="userName" class="form-control"
+									th:placeholder="#{loginName}" autocomplete="off"
+									autofocus ng-required="true"><input type="hidden"
+									id="code" name="code" ng-model="code">
+								<h5 class="text-danger" th:text="#{pleaseEnter} + #{loginName}"
+									ng-show="myForm.userName.$invalid && myForm.userName.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+	
+					<div>
+						<div class="form_group">
+							<label for="newCode" th:text="#{loginNewCode}"
+									class="form_label form_label_gray">
+							</label>
+							<div class="form_input">
+								<input type="password" id="newCode" name="newCode"
+									ng-model="newCode" ng-pattern="regex" class="form-control"
+									th:placeholder="#{loginNewCode}"
+									autocomplete="off" ng-required="true">
+								<h5 class="text-danger"
+									ng-show="!myForm.newCode.$error.required && myForm.newCode.$invalid && myForm.newCode.$dirty">
+									密碼強度不足(長度必須至少{{passwordLength}}個字元，並且必須包含<u>英文字母</u>及<u>數字</u>及<u>非英文字母字元[ex.!、$、#、%]</u>三種)
+								</h5>
+							</div>
+						</div>
+					</div>
+	
+					<div>
+						<div class="form_group">
+							<label for="newCodeAgain" th:text="#{loginNewCodeAgain}"
+									class="form_label form_label_gray">
+							</label>
+							<div class="form_input">
+								<input type="password" id="newCodeAgain" name="newCodeAgain"
+									ng-model="newCodeAgain" class="form-control"
+									th:placeholder="#{loginNewCodeAgain}"
+									autocomplete="off" ng-required="true">
+								<h5 class="text-danger" th:text="#{pleaseEnter} + #{loginNewCodeAgain}"
+									ng-show="myForm.newCodeAgain.$error.required && myForm.newCodeAgain.$dirty">
+								</h5>
+								<h5 class="text-danger" th:text="#{loginNewCodeNotTheSame}"
+									ng-show="!myForm.newCodeAgain.$error.required && myForm.newCodeAgain.$dirty"
+									ng-if="!(newCode === newCodeAgain)">
+								</h5>
+							</div>
+						</div>
+					</div>
+	
+					<div class="help-block"></div>
+	
+					<div id="divSubmit" class="btn-group btn-group-justified"
+						role="group">
+						<a class="btn btn_custom btn_pink" type="button"
+							ng-click="!myForm.$valid || !(newCode === newCodeAgain) || reset()"
+							ng-disabled="!myForm.$valid || !(newCode === newCodeAgain)">
+							<i class="fas fa-fw fa-key"></i>
+							<span th:text="#{loginResetCode}"></span>
+						</a>
+					</div>
+
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	<div class="footer_space"></div>
+	<footer th:replace="/include/footer :: commonFooter"></footer>
+</body>
+</html>

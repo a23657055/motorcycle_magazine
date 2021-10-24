@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+
+<head th:replace="/include/head_index :: headIndex(#{globalResetCode})"></head>
+<script type="text/javascript">
+	var memberSignUp = "[[#{memberSignUp}]]";
+	var memberSignUpFail = "[[#{memberSignUpFail}]]";
+	var noResultsMessage = "[[#{globalNoResultMessage}]]";
+	var signToolTip = "[[#{globalSignToolTip}]]";	
+</script>
+<script>
+</script>
+<script type="text/javascript" th:src="@{/js/sign_up.js}"></script>	
+<script type="text/javascript" th:src="@{/plugins/jquery.twzipcode.min.js}"></script>	
+<script type="text/javascript" th:src="@{/plugins/np-autocomplete/np-autocomplete.min.js}"></script>	
+<link rel="stylesheet" th:href="@{/plugins/np-autocomplete/np-autocomplete.min.css}">
+
+<body ng-app="myApp">
+	<nav th:replace="/include/navbar_home :: navbarHome"></nav>
+	
+	<div ng-controller="getAppController" class="container">
+		<div class="row">
+			<div id="sign" class="col-xs-12 col-sm-offset-1 col-sm-10 shadow_board">
+				<h4 class="form_heading form_heading_gray">
+					<big><i class="fas fa-fw fa-user-circle fa-lg"></i></big>
+					<span th:text="#{globalSignUp}"></span>
+				</h4>
+
+				<form name="myForm">
+					<div>
+						<input type="text" id="orgCode" name="orgCode" ng-model="orgCode"
+							ng-required="true" style="display: none;">
+						<input type="text" id="orgName" name="orgName" ng-model="orgName"
+							style="display: none;">
+							
+						<div class="form_group form_group_pdpl" np-autocomplete="options"
+							np-input-model="orgName" ng-model="orgCode" np-auto="autoModel">
+							<label for="orgCode" th:text="#{orgCode}"
+									class="form_label form_label_pdpl form_label_gray">
+							</label>
+							<div class="form_input form_input_pdpl">
+								<input type="text" id="org" name="org" ng-model="org"
+									class="form-control"
+									th:placeholder="#{orgType4Code}+'/'+#{orgType4Name}"
+									autocomplete="off" autofocus ng-required="true">
+							</div>
+						</div>
+						<h5 class="text-danger valid_fix_pdpl"
+							th:text="#{pleaseEnter}+#{orgType4Code}+'/'+#{orgType4Name}"
+							ng-show="myForm.orgCode.$error.required && myForm.org.$dirty">
+						</h5>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="orgAddress" th:text="#{orgAddress}"
+								class="form_label form_label_pdpl form_label_gray">
+							</label>
+							<div class="form_input form_input_pdpl">
+								<div id="twzipcode" class="twzipcode"></div>
+								<script>
+									$("#twzipcode").twzipcode({
+										"zipcodeIntoDistrict" : true,
+										"css" : ["city form-control",
+												"town form-control"],
+										"countyName" : "city",
+										"districtName" : "town"
+									});
+								</script>
+								<input type="text" id="orgAddress" name="orgAddress"
+									ng-model="orgAddress" ng-maxlength="256" class="form-control"
+									th:placeholder="#{orgType4Address}"
+									autocomplete="off" ng-required="true">
+								<h5 class="text-danger" th:text="#{pleaseEnter}+#{orgCity}"
+									ng-show="myForm.orgCity.$error.required && myForm.orgCity.$dirty">
+								</h5>
+								<h5 class="text-danger" th:text="#{orgTownFormat}"
+									ng-show="!myForm.orgCity.$error.required && myForm.orgCity.$invalid && myForm.orgCity.$dirty">
+								</h5>
+								<h5 class="text-danger" th:text="#{pleaseEnter}+#{orgTown}"
+									ng-show="myForm.orgTown.$error.required && myForm.orgTown.$dirty">
+								</h5>
+								<h5 class="text-danger" th:text="#{orgTownFormat}"
+									ng-show="!myForm.orgTown.$error.required && myForm.orgTown.$invalid && myForm.orgTown.$dirty">
+								</h5>
+								<h5 class="text-danger" th:text="#{pleaseEnter}+#{orgType4Address}"
+									ng-show="myForm.orgAddress.$error.required && myForm.orgAddress.$dirty">
+								</h5>
+								<h5 class="text-danger" th:text="#{orgAddressFormat}"
+									ng-show="!myForm.orgAddress.$error.required && myForm.orgAddress.$invalid && myForm.orgAddress.$dirty">
+								</h5>
+								<input type="text" id="orgCity" name="orgCity"
+									ng-model="orgCity" ng-maxlength="10" class="form-control"
+									th:placeholder="#{orgCity}" autocomplete="off"
+									ng-required="true" style="display: none;">
+								<input type="text" id="orgTown" name="orgTown" ng-model="orgTown"
+									ng-maxlength="10" class="form-control"
+									th:placeholder="#{orgTown}" autocomplete="off"
+									ng-required="true" style="display: none;">
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="parentOrgId" th:text="#{parentOrgName}"
+								class="form_label form_label_pdpl form_label_gray">
+							</label>
+							<div class="form_input form_input_pdpl">
+								<select id="parentOrgId" name="parentOrgId"
+									ng-model="parentOrgId" class="form-control"
+									ng-options="authorOrg.value as authorOrg.name for authorOrg in authorOrgs">
+									<option value="" th:text="#{pleaseSelect} + #{parentOrgName}"></option>
+								</select>
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="memberAccount" th:text="#{memberAdminAccount}"
+								class="form_label form_label_pdpl form_label_gray">
+							</label>
+							<div class="form_input form_input_pdpl">
+								<input type="text" id="memberAccount" name="memberAccount"
+									ng-model="memberAccount"
+									ng-model-options="{ updateOn: 'default' , allowInvalid:'true'}"
+									ng-maxlength="64" ng-pattern="/^[a-zA-Z][a-zA-Z0-9]{3,63}$/"
+									ng-keyup="checkMemberAccount()" class="form-control"
+									onpaste="return false" oncopy="return false"
+									oncut="return false" oncontextmenu="return false"
+									ng-copy="$event.preventDefault()"
+									ng-cut="$event.preventDefault()"
+									ng-paste="$event.preventDefault()"
+									th:placeholder="#{memberAdminAccount}"
+									autocomplete="off" ng-required="true">
+								<h5 class="text-danger" th:text="#{pleaseEnter}+#{memberAdminAccount}"
+									ng-show="myForm.memberAccount.$error.required && myForm.memberAccount.$dirty">
+								</h5>
+								<h5 class="text-danger" th:text="#{memberAccountFormat}"
+									ng-show="!myForm.memberAccount.$error.required && myForm.memberAccount.$invalid && myForm.memberAccount.$dirty">
+								</h5>
+								<h5 class="text-danger" th:text="#{memberAccountExist}"
+									ng-show="memberAccountVerifyFail">
+								</h5>
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="memberName" th:text="#{memberAdminName}"
+								class="form_label form_label_pdpl form_label_gray">
+							</label>
+							<div class="form_input form_input_pdpl">
+								<input type="text" id="memberName" name="memberName"
+									ng-model="memberName" ng-maxlength="128" class="form-control"
+									th:placeholder="#{memberName}"
+									autocomplete="off" ng-required="true">
+								<h5 class="text-danger" th:text="#{pleaseEnter}+#{memberAdminName}"
+									ng-show="myForm.memberName.$error.required && myForm.memberName.$dirty">
+								</h5>
+								<h5 class="text-danger" th:text="#{memberNameFormat}"
+									ng-show="!myForm.memberName.$error.required && myForm.memberName.$invalid && myForm.memberName.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="memberEmail" th:text="#{memberAdminEmail}"
+								class="form_label form_label_pdpl form_label_gray">
+							</label>
+							<div class="form_input form_input_pdpl">
+								<input type="email" id="memberEmail" name="memberEmail"
+									ng-model="memberEmail" ng-maxlength="128" class="form-control"
+									th:placeholder="#{memberEmail}"
+									autocomplete="off" ng-required="true" ng-disabled="false">
+								<h5 class="text-danger" th:text="#{pleaseEnter}+#{memberAdminEmail}"
+									ng-show="myForm.memberEmail.$error.required && myForm.memberEmail.$dirty">
+								</h5>
+								<h5 class="text-danger" th:text="#{memberEmailFormat}"
+									ng-show="!myForm.memberEmail.$error.required && myForm.memberEmail.$invalid && myForm.memberEmail.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="memberMobilePhone" th:text="#{memberAdminMobilePhone}"
+								class="form_label form_label_pdpl form_label_gray">
+							</label>
+							<div class="form_input form_input_pdpl">
+								<input type="text" id="memberMobilePhone"
+									name="memberMobilePhone" ng-model="memberMobilePhone"
+									ng-maxlength="10" ng-minlength="10" ng-pattern="/^09\d{8}$/"
+									class="form-control"
+									th:placeholder="#{memberMobilePhone}"
+									autocomplete="off" pattern="[0-9]*" inputmode="numeric"
+									onkeypress="var key = window.event ? event.keyCode : event.which; return (key >= 48 && key <= 57) || key == 8"
+									ng-required="true">
+								<h5 class="text-danger" th:text="#{pleaseEnter}+#{memberAdminMobilePhone}"
+									ng-show="myForm.memberMobilePhone.$error.required && myForm.memberMobilePhone.$dirty">
+								</h5>
+								<h5 class="text-danger" th:text="#{memberMobilePhoneFormat}"
+									ng-show="myForm.memberMobilePhone.$invalid && myForm.memberMobilePhone.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+					
+					<div class="help-block"></div>
+					<div>
+						<div class="form_group text-center">
+							<i class="far fa-fw fa-check-square" ng-show="pdplIsAgree"></i>
+							<i class="far fa-fw fa-square" ng-show="!pdplIsAgree"></i>
+							<label for="pdplIsAgree" th:text="#{pdplIsAgree}"></label>
+							<a href="#" ng-click="pdplShow()" th:text="#{pdplShow}"></a>
+						</div>
+					</div>
+					
+					<div class="help-block"></div>
+					<div id="divSubmit" class="btn-group btn-group-justified" role="group">
+						<a class="btn btn_custom btn_green" type="button"
+							ng-click="!myForm.$valid || memberAccountVerifyFail || !pdplIsAgree || signup()"
+							ng-disabled="!myForm.$valid || memberAccountVerifyFail || !pdplIsAgree">
+							<i class="fas fa-fw fa-user-plus"></i>
+							<span th:text="#{loginSignUp}"></span>
+						</a>
+					</div>
+				</form>
+			</div>
+
+			<div id="pdpl" style="display: none;"
+					class="col-xs-12 col-sm-offset-1 col-sm-10 shadow_board">
+				<h4 class="form_heading form_heading_gray">
+					<i class="fas fa-fw fa-user-circle fa-lg"></i>
+					<span th:text="#{pdplTitle}"></span>
+				</h4>
+				
+				<div class="wall wall_pdpl" th:utext="#{pdplWord}"></div>
+				
+				<div class="help-block"></div>
+				
+				<form name="myFormPdpl" class="text-center">
+					<div id="divSubmit" class="btn-group btn-group-justified" role="group">
+						<a id="pdplAgree" type="button" ng-click="pdplAgree()"
+								class="btn btn_custom btn_green">
+							<i class="fas fa-fw fa-check"></i>
+							<span th:text="#{pdplAgree}"></span>
+						</a>
+						<a id="pdplDisgree" type="button" ng-click="pdplDisagree()"
+								class="btn btn_custom btn_pink">
+							<i class="fas fa-fw fa-ban"></i>
+							<span th:text="#{pdplDisagree}"></span>
+						</a>
+					</div>
+				</form>
+			</div>
+		</div>
+		
+	</div>
+	
+	<div class="footer_space"></div>
+	<footer th:replace="/include/footer :: commonFooter"></footer>
+</body>
+</html>

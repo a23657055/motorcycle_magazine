@@ -1,0 +1,6 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="/include/head_index :: headIndex(#{global.page.error.code404})"></head>
+<link rel="stylesheet" th:href="@{/css/errorpage.css}" />
+<body th:replace="/include/error-page :: commonErrorPage(404, #{global.page.error.code404})"></body>
+</html>

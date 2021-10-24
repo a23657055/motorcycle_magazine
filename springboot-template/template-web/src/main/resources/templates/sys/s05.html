@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head th:replace="/include/head :: commonHead('sys')"></head>
+<script>
+	var globalSureDisableMember = "[[#{globalSureDisableMember}]]";
+	var memberIdDeleteBtn = "[[${memberId}]]";
+	var actionCreateSaveBtn = [[${actionCreate}]];
+	var actionUpdateSaveBtn = [[${actionUpdate}]];
+</script>
+<script type="text/javascript" th:src="@{/js/sys/s05.js}"></script>	
+<script	th:src="@{/js/bootstrap-select.js}"></script>
+<link rel="stylesheet" th:href="@{/css/bootstrap-select.css}" />
+
+<body class="index-login" ng-controller="getAppController" id="body">
+	<nav th:replace="/include/navbar_common :: navbarCommon" id="body"></nav>
+	
+	<div id="divQuery" class="container">
+		<div class="row">
+			<div class="thumbnail">
+				<div class="caption">
+					<img class="img-responsive"	th:src="@{/images/icon_information.png}">
+					<h3 th:text="${appName}">
+					</h3>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12 shadow_board">
+				<form name="queryForm">
+					<div>
+						<div class="form_group">
+							<label for="QueryOrgId" th:text="#{memberOrgName}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<select id="QueryOrgId" name="QueryOrgId" ng-model="QueryOrgId"
+										data-live-search="true" class="selectpicker form-control"
+										ng-disabled="QueryOrgIdDisable" ng-change="changOrgId()"
+										ng-options="org.Id as org.Name + '('+org.Code+')' for org in orgs">														
+									<option th:if="${isApplyAdmin!=null && !isApplyAdmin}" value="" selected th:text="#{all}"></option>	
+								</select>
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="QueryAccount" th:text="#{memberAccount}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="QueryAccount" name="QueryAccount"
+									ng-model="QueryAccount" class="form-control"
+									th:placeholder="#{memberAccount}"
+									autocomplete="off">
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="QueryName" th:text="#{memberName}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="QueryName" name="QueryName"
+									ng-model="QueryName" class="form-control"
+									th:placeholder="#{memberName}"
+									autocomplete="off">
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="QueryEmail" th:text="#{memberEmail}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="QueryEmail" name="QueryEmail"
+									ng-model="QueryEmail" class="form-control"
+									th:placeholder="#{memberEmail}"
+									autocomplete="off">
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="QuerySpareEmail" th:text="#{memberSpareEmail}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="QuerySpareEmail" name="QuerySpareEmail"
+									ng-model="QuerySpareEmail" class="form-control"
+									th:placeholder="#{memberSpareEmail}"
+									autocomplete="off">
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="QueryMobilePhone" th:text="#{memberMobilePhone}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="QueryMobilePhone" name="QueryMobilePhone"
+									ng-model="QueryMobilePhone" class="form-control"
+									th:placeholder="#{memberMobilePhone}"
+									autocomplete="off">
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="QueryCityPhone" th:text="#{memberCityPhone}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="QueryCityPhone" name="QueryCityPhone"
+									ng-model="QueryCityPhone" class="form-control"
+									th:placeholder="#{memberCityPhone}"
+									autocomplete="off">
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="QueryFaxPhone" th:text="#{memberFaxPhone}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="QueryFaxPhone" name="QueryFaxPhone"
+									ng-model="QueryFaxPhone" class="form-control"
+									th:placeholder="#{memberFaxPhone}"
+									autocomplete="off">
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="QueryAddress" th:text="#{memberAddress}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="QueryAddress" name="QueryAddress"
+									ng-model="QueryAddress" class="form-control"
+									th:placeholder="#{memberAddress}"
+									autocomplete="off">
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="QueryDepartment" th:text="#{memberDepartment}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="QueryDepartment" name="QueryDepartment"
+									ng-model="QueryDepartment" class="form-control"
+									th:placeholder="#{memberDepartment}"
+									autocomplete="off">
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="QueryTitle" th:text="#{memberPosition}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="QueryTitle" name="QueryTitle"
+									ng-model="QueryTitle" class="form-control"
+									th:placeholder="#{memberPosition}"
+									autocomplete="off">
+							</div>
+						</div>
+					</div>
+					<th:block th:if="${(isMemberAdmin==true && isAdmin==false && isHisac==false)!=true}">
+					<div class="form_group">
+						<label for="QueryIsEnable" th:text="#{isEnable}"
+							class="form_label form_label_search form_label_gray">
+						</label>
+						<div class="form_input form_input_search">
+							<select id="QueryIsEnable" name="QueryIsEnable"
+									ng-model="QueryIsEnable" class="form-control">
+								<option value="" selected th:text="#{all}"></option>
+								<option value="true" th:text="#{isEnableTrue}"></option>
+								<option value="false" th:text="#{isEnableFalse}"></option>
+							</select>
+						</div>
+					</div>
+					</th:block>
+					
+					<div>
+						<div class="form_group"></div>
+					</div>
+					<div class="help-block"></div>
+					
+					<div class="submit_bar">
+						<button class="btn btn_custom btn_blue" type="button" ng-click="queryData()">
+							<i class="fas fa-fw fa-search"></i>
+							<th:block th:text="#{btnSearch}"></th:block>
+						</button>
+						<button class="btn btn_custom btn_gray" type="button" ng-click="clearData()">
+							<i class="fas fa-fw fa-redo-alt"></i>
+							<th:block th:text="#{btnReset}"></th:block>
+						</button>
+					</div>
+					
+				</form>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="thumbnail">
+				<div class="caption">
+					<img class="img-responsive" th:src="@{/images/icon_search.png}">
+					<h3 th:text="#{globalSearchResult}"></h3>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12 col-md-6 no_padding">
+				<div class="help-block"></div>
+				<span th:replace="/include/table_row_select"></span>
+			</div>
+			<div class="col-xs-12 col-md-6 no_padding">
+				<a class="btn btn_custom btn_blue pull-right" type="button"
+						ng-click="openEdit(1)" th:if="${actionCreate}">
+					<i class="fas fa-fw fa-plus-circle"></i>
+					<th:block th:text="#{btnCreate}"></th:block>
+				</a>	
+			</div>						
+		</div>
+
+		<div class="row">
+			<div class="table-responsive">
+				<table class="table table-striped table-bordered table-hover table_customer table_gray">
+					<thead>
+						<tr>
+							<th th:if="${isAdmin || isHisac || isApplyAdmin || isMemberAdmin}">選擇寄發會員帳號申請完成通知信件</th>	
+							<th rowspan="2">
+								<a href="#" ng-click="setSortName('account')">
+									<th:block th:text="#{memberAccount}"></th:block>
+									<i ng-show="sorttype != 'account'" class="fas fa-fw fa-sort text-muted"></i>
+									<i ng-show="sorttype == 'account' && !sortreverse" class="fas fa-fw fa-caret-down"></i>
+									<i ng-show="sorttype == 'account' && sortreverse" class="fas fa-fw fa-caret-up"></i>
+								</a>
+							</th>
+							
+							<th>
+								<a href="#" ng-click="setSortName('name')">
+									<th:block th:text="#{memberName}"></th:block>
+									<i ng-show="sorttype != 'name'" class="fas fa-fw fa-sort text-muted"></i>
+									<i ng-show="sorttype == 'name' && !sortreverse" class="fas fa-fw fa-caret-down"></i>
+									<i ng-show="sorttype == 'name' && sortreverse" class="fas fa-fw fa-caret-up"></i>
+								</a>
+								<br />
+								<a href="#" ng-click="setSortName('title')">
+									<th:block th:text="#{memberPosition}"></th:block>
+									<i ng-show="sorttype != 'title'" class="fas fa-fw fa-sort text-muted"></i>
+									<i ng-show="sorttype == 'title' && !sortreverse" class="fas fa-fw fa-caret-down"></i>
+									<i ng-show="sorttype == 'title' && sortreverse" class="fas fa-fw fa-caret-up"></i>
+								</a>
+							</th>
+							
+							<th>
+								<a href="#" ng-click="setSortName('email')">
+									<th:block th:text="#{memberEmail}"></th:block>
+									<i ng-show="sorttype != 'email'" class="fas fa-fw fa-sort text-muted"></i>
+									<i ng-show="sorttype == 'email' && !sortreverse" class="fas fa-fw fa-caret-down"></i>
+									<i ng-show="sorttype == 'email' && sortreverse" class="fas fa-fw fa-caret-up"></i>
+								</a>
+								<br />
+								<a href="#" ng-click="setSortName('spareEmail')">
+									<th:block th:text="#{memberSpareEmail}"></th:block>
+									<i ng-show="sorttype != 'spareEmail'" class="fas fa-fw fa-sort text-muted"></i>
+									<i ng-show="sorttype == 'spareEmail' && !sortreverse" class="fas fa-fw fa-caret-down"></i>
+									<i ng-show="sorttype == 'spareEmail' && sortreverse" class="fas fa-fw fa-caret-up"></i>
+								</a>
+							</th>							
+							
+							<th>
+								<a href="#" ng-click="setSortName('mobilePhone')">
+									<th:block th:text="#{memberMobilePhone}"></th:block>
+									<i ng-show="sorttype != 'mobilePhone'" class="fas fa-fw fa-sort text-muted"></i>
+									<i ng-show="sorttype == 'mobilePhone' && !sortreverse" class="fas fa-fw fa-caret-down"></i>
+									<i ng-show="sorttype == 'mobilePhone' && sortreverse" class="fas fa-fw fa-caret-up"></i>
+								</a>
+								<br />
+								<a href="#" ng-click="setSortName('cityPhone')">
+									<th:block th:text="#{memberCityPhone}"></th:block>
+									<i ng-show="sorttype != 'cityPhone'" class="fas fa-fw fa-sort text-muted"></i>
+									<i ng-show="sorttype == 'cityPhone' && !sortreverse" class="fas fa-fw fa-caret-down"></i>
+									<i ng-show="sorttype == 'cityPhone' && sortreverse" class="fas fa-fw fa-caret-up"></i>
+								</a>
+							</th>	
+
+							<th>
+								<a href="#" ng-click="setSortName('orgName')">
+									<th:block th:text="#{memberOrgName}"></th:block>
+									<i ng-show="sorttype != 'orgName'" class="fas fa-fw fa-sort text-muted"></i>
+									<i ng-show="sorttype == 'orgName' && !sortreverse" class="fas fa-fw fa-caret-down"></i>
+									<i ng-show="sorttype == 'orgName' && sortreverse" class="fas fa-fw fa-caret-up"></i>
+								</a>
+								<br />
+								<a href="#" ng-click="setSortName('department')">
+									<th:block th:text="#{memberDepartment}"></th:block>
+									<i ng-show="sorttype != 'department'" class="fas fa-fw fa-sort text-muted"></i>
+									<i ng-show="sorttype == 'department' && !sortreverse" class="fas fa-fw fa-caret-down"></i>
+									<i ng-show="sorttype == 'department' && sortreverse" class="fas fa-fw fa-caret-up"></i>
+								</a>
+							</th>	
+
+							<th>
+								<th:block th:text="#{memberStatus}"></th:block>
+								<br />
+								<th:block th:text="#{roleName}"></th:block>
+							</th>
+							<th th:if="${actionUpdate && actionDelete}" class="func">&nbsp;</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="item in allitems">
+							<td th:if="${isAdmin || isHisac || isApplyAdmin || isMemberAdmin}">
+								<input type="checkbox" ng-click="changeSent(item.Id)">
+							</td>
+							<td>{{item.Account}}</td>
+							<td>{{item.Name}}<br />{{item.Title}}</td>
+							<td>{{item.Email}}<br />{{item.SpareEmail}}</td>
+							<td>{{item.MobilePhone}}<br />{{item.CityPhone}}</td>
+							<td>{{item.OrgName}}<br />{{item.Department}}<br /></td>
+							<td>
+								<span ng-if="item.Status==0" th:text="#{memberStatus0}"></span>
+								<span ng-if="item.Status==1" th:text="#{memberStatus1}"></span>
+								<span ng-if="item.Status==2" th:text="#{memberStatus2}"></span>		
+								<span ng-if="item.Status==3" th:text="#{memberStatus3}"></span>
+								<br />{{item.Roles| join:', '}}
+							</td>
+							<td th:if="${actionUpdate && actionDelete}" class="text-center">
+								<a th:if="${actionUpdate}" ng-click="editData(item.Id);"
+										th:title="#{btnEdit}" class="btn btn-sm btn-primary">
+									<i class="fas fa-fw fa-edit"></i>
+									<th:block th:text="#{btnEdit}"></th:block>
+								</a>
+								<br/>
+								<a ng-show="LocalMemberId != item.Id" ng-click="deleteData(item.Id);"
+										th:title="#{btnDelete}" class="btn btn-sm btn-danger">
+									<i class="fas fa-fw fa-trash"></i>
+									<th:block th:text="#{btnDelete}"></th:block>
+								</a>
+								<br ng-if="LocalActionUpdate && item.Status==2" />
+								<!--								
+								<a href="#" ng-if="LocalActionDelete && item.Status==3 && ${memberId} != item.Id"
+										class="btn btn-sm btn-info" ng-click="deleteData(item.Id);">
+									<i class="far fa-fw fa-trash-alt"></i>
+									<th:block th:text="#{btnIsEnableFalse}"></th:block>
+								</a>
+								-->
+								<th:block th:text="${baseMemberId}"></th:block>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			
+			<span th:replace="/include/table_row_empty"></span>
+			
+			<div class="text-center">
+				<a th:if="${isAdmin || isHisac || isApplyAdmin || isMemberAdmin}"
+						class="btn btn_custom btn_blue pull-right" type="button"
+						ng-click="sentMember.length==0 || sendToMember()"
+						ng-disabled="sentMember.length==0">
+					<i class="glyphicon glyphicon-envelope"></i>
+					寄發會員帳號申請完成通知信件(本頁面選擇)
+				</a>
+				<paging class="pagination" page="currentPage" page-size="maxRows"
+					total="total" show-prev-next="true" show-first-last="true"
+					text-next-class="fas fa-step-forward"
+					text-prev-class="fas fa-step-backward"
+					text-first-class="fas fa-fast-backward"
+					text-last-class="fas fa-fast-forward"
+					paging-action="queryData(page)"></paging>
+			</div>
+		</div>
+	</div>
+	
+	<div id="divEdit" class="container" ng-show="btnIns || btnUpd">
+		<div class="row">
+			<h4 class="form_heading form_heading_fix form_heading_gray" ng-show="btnIns">
+				<big><i class="fas fa-fw fa-plus-circle fa-lg"></i></big>
+				<b th:text="#{btnCreate}"></b>
+			</h4>
+			<h4 class="form_heading form_heading_fix form_heading_gray" ng-show="btnUpd">
+				<big><i class="fas fa-fw fa-edit fa-lg"></i></big>
+				<b th:text="#{btnEdit}"></b>
+			</h4>
+			<div class="col-xs-12 shadow_board">
+				<form name="editForm">
+					<div>
+						<div class="form_group">
+							<label for="OrgId" class="form_label form_label_search form_label_gray">
+								<p style="font-size:10px; color:red; display:inline;">(*必填)</p>
+								<th:block th:text="#{memberOrgName}"></th:block>
+							</label>
+							<div class="form_input form_input_search">
+								<select id="OrgId" name="OrgId" ng-model="OrgId" ng-disabled="OrgIdDisable || btnUpd"
+									data-live-search="true" class="selectpicker form-control" ng-required="true"
+									ng-options="org.Id as org.Name + '('+org.Code+')' for org in orgs">
+									<option value="" selected th:text="#{pleaseSelect} + #{memberOrgName}"></option>
+								</select>
+								<h5 class="text-danger" th:text="#{pleaseSelect} + #{memberOrgName}"
+									ng-show="editForm.OrgId.$error.required && editForm.OrgId.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="Account" class="form_label form_label_search form_label_gray">
+								<p style="font-size:10px; color:red; display:inline;">(*必填)</p>
+								<th:block th:text="#{memberAccount}"></th:block>
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="Account" name="Account"
+									ng-model="Account" class="form-control"
+									th:placeholder="#{memberAccount}"
+									autocomplete="off" ng-required="true" ng-maxlength="64"
+									ng-pattern="/^[a-zA-Z][a-zA-Z0-9-]{3,64}$/">
+								<h5 class="text-danger" th:text="#{pleaseEnter} + #{memberAccount}"
+									ng-show="editForm.Account.$error.required && editForm.Account.$dirty">
+								</h5>
+								<h5 class="text-danger" th:text="#{formatMaxLengthAfter(64)}"
+									ng-show="editForm.Account.$error.maxlength && editForm.Account.$dirty">
+								</h5>	
+								<h5 class="text-danger" th:text="#{memberAccountFormat}"
+									ng-show="!editForm.Account.$error.required && editForm.Account.$invalid && editForm.Account.$dirty">	
+								</h5>							
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="Name" class="form_label form_label_search form_label_gray">
+								<p style="font-size:10px; color:red; display:inline;">(*必填)</p>
+								<th:block th:text="#{memberName}"></th:block>
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="Name" name="Name" ng-model="Name"
+									class="form-control"
+									th:placeholder="#{memberName}"
+									autocomplete="off" ng-required="true" ng-maxlength="128">
+								<h5 class="text-danger" th:text="#{pleaseEnter} + #{memberName}"
+									ng-show="editForm.Name.$error.required && editForm.Name.$dirty">
+								</h5>
+								<h5 class="text-danger" th:text="#{formatMaxLengthAfter(128)}"
+									ng-show="editForm.Name.$error.maxlength && editForm.Name.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="Email" class="form_label form_label_search form_label_gray">
+								<p style="font-size:10px; color:red; display:inline;">(*必填)</p>
+								<th:block th:text="#{memberEmail}"></th:block>
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="Email" name="Email" ng-model="Email"
+									class="form-control"
+									th:placeholder="#{memberEmail}"
+									autocomplete="off" ng-required="true" ng-maxlength="128"
+									ng-pattern="/^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i" />
+								<h5 class="text-danger" th:text="#{pleaseEnter} + #{memberEmail}"
+									ng-show="editForm.Email.$error.required && editForm.Email.$dirty">
+								</h5>
+								<h5 class="text-danger" th:text="#{memberEmailFormat}"
+									ng-show="!editForm.Email.$error.required && editForm.Email.$invalid && editForm.Email.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="SpareEmail" th:text="#{memberSpareEmail}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="SpareEmail" name="SpareEmail"
+									ng-model="SpareEmail" class="form-control"
+									ng-pattern="/^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i"
+									th:placeholder="#{memberSpareEmail}"
+									autocomplete="off" ng-maxlength="128">
+								<h5 class="text-danger" th:text="#{memberEmailFormat(128)}"
+									ng-show="!editForm.SpareEmail.$error.required && editForm.SpareEmail.$invalid && editForm.SpareEmail.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="MobilePhone" th:text="#{memberMobilePhone}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="MobilePhone"
+									name="MobilePhone" ng-model="MobilePhone"
+									ng-maxlength="10" ng-minlength="10" ng-pattern="/^09\d{8}$/"
+									class="form-control"
+									th:placeholder="#{memberMobilePhone}"
+									autocomplete="off" pattern="[0-9]*" inputmode="numeric"
+									onkeypress="var key = window.event ? event.keyCode : event.which; return (key >= 48 && key <= 57) || key == 8">
+								<h5 class="text-danger" th:text="#{memberMobilePhoneFormat}"
+									ng-show="editForm.MobilePhone.$invalid && editForm.MobilePhone.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="CityPhone" th:text="#{memberCityPhone}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="CityPhone" name="CityPhone"
+									ng-model="CityPhone" class="form-control"
+									th:placeholder="#{memberCityPhone}"
+									autocomplete="off" ng-maxlength="25"/>
+								<h5 class="text-danger" th:text="#{formatMaxLengthAfter(25)}"
+									ng-show="editForm.CityPhone.$error.maxlength && editForm.CityPhone.$dirty">
+								</h5>								
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="FaxPhone" th:text="#{memberFaxPhone}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="FaxPhone" name="FaxPhone"
+									ng-model="FaxPhone" class="form-control"
+									th:placeholder="#{memberFaxPhone}"
+									autocomplete="off" ng-maxlength="16"
+									ng-pattern="/^0\d{1,2}-\d{6,10}/" />
+								<h5 class="validation-msg" th:text="#{phoneFormatErr}"
+									ng-show="!editForm.FaxPhone.$error.required && editForm.FaxPhone.$invalid && editForm.FaxPhone.$dirty">
+								</h5>
+								<h5 class="text-danger" th:text="#{formatMaxLengthAfter(16)}"
+									ng-show="editForm.FaxPhone.$error.maxlength && editForm.FaxPhone.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="Address" th:text="#{memberAddress}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="Address" name="Address"
+									ng-model="Address" class="form-control"
+									th:placeholder="#{memberAddress}"
+									autocomplete="off" ng-maxlength="256" />
+								<h5 class="text-danger" th:text="#{formatMaxLengthAfter(256)}"
+									ng-show="editForm.Address.$error.maxlength && editForm.Address.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="Department" th:text="#{memberDepartment}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="Department" name="Department"
+									ng-model="Department" class="form-control"
+									th:placeholder="#{memberDepartment}"
+									autocomplete="off" ng-maxlength="128" />
+								<h5 class="text-danger" th:text="#{formatMaxLengthAfter(128)}"
+									ng-show="editForm.Department.$error.maxlength && editForm.Department.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="Title" th:text="#{memberPosition}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="Title" name="Title" ng-model="Title"
+									class="form-control"
+									th:placeholder="#{memberPosition}"
+									autocomplete="off" ng-maxlength="128" />
+								<h5 class="text-danger" th:text="#{formatMaxLengthAfter(128)}"
+									ng-show="editForm.Title.$error.maxlength && editForm.Title.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+
+					<div ng-show="memberRoleData.length > 0">
+						<div class="form_group">
+							<label for="Role" th:text="#{s05Role}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<div class="checkbox" ng-repeat="item in memberRoleData">
+									<label>
+										<input type="checkbox" ng-model="item.Flag">
+										<span class="lbl">{{item.Name}}</span>
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div ng-show="LocalMemberId != Id">
+						<div class="form_group">
+							<label for="IsEnable" th:text="#{isEnable}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search_half">
+								<toggle ng-model="IsEnable"
+									th:on="#{toggleIsEnableTrue}"
+									th:off="#{toggleIsEnableFalse}"
+									onstyle="btn-success" offstyle="btn-danger">
+								</toggle>
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group"></div>
+					</div>
+					<div class="help-block"></div>
+					
+					<div class="submit_bar">
+						<button class="btn btn_custom btn_blue" type="button"
+								ng-click="!editForm.$valid || createData()"
+								ng-disabled="!editForm.$valid"
+								ng-show="LocalActionCreate && btnIns">
+							<i class="fas fa-fw fa-save"></i>
+							<th:block th:text="#{btnSave}"></th:block>
+						</button>
+						<button class="btn btn_custom btn_blue" type="button"
+								ng-click="!editForm.$valid || updateData()"
+								ng-disabled="!editForm.$valid"
+								ng-show="LocalActionUpdate && btnUpd">
+							<i class="fas fa-fw fa-save"></i>
+							<th:block th:text="#{btnSave}"></th:block>
+						</button>
+						<button class="btn btn_custom btn_gray" type="button" ng-click="closeEdit()">
+							<i class="fas fa-fw fa-undo"></i>
+							<th:block th:text="#{btnReturn}"></th:block>
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	<div class="footer_space"></div>
+	<footer th:replace="/include/footer :: commonFooter"></footer>
+</body>
+</html>
+

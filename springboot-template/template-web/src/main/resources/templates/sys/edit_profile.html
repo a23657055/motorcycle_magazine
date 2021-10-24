@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head th:replace="/include/head :: commonHead('sys')"></head>
+<script type="text/javascript" th:src="@{/js/sys/edit_profile.js}"></script>	
+
+<body class="index-login" ng-controller="getAppController" id="body">
+	<nav th:replace="/include/navbar_common :: navbarCommon"></nav>
+	
+	<div id="divEdit" class="container">
+		<div class="row">
+			<div class="thumbnail">
+				<div class="caption">
+					<img class="img-responsive" th:src="@{/resources/images/icon_profiles.png}">
+					<h3 th:text="${appName}"></h3>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12 shadow_board">
+				<form name="myForm">
+					<div>
+						<div class="form_group">
+							<label for="memberName" th:text="#{memberName}"
+								class="form_label form_label_pdpl form_label_gray">
+							</label>
+							<div class="form_input form_input_pdpl">
+								<input type="text" id="memberName" name="memberName"
+									ng-model="memberName" ng-maxlength="128" class="form-control"
+									th:placeholder="#{memberName}"
+									autocomplete="off" ng-required="true">
+								<h5 class="text-danger" th:text="#{pleaseEnter} + #{memberName}"
+									ng-show="myForm.memberName.$error.required && myForm.memberName.$dirty">
+								</h5>
+								<h5 class="text-danger" th:text="#{memberNameFormat}"
+									ng-show="!myForm.memberName.$error.required && myForm.memberName.$invalid && myForm.memberName.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<div class="form_group">
+							<label for="memberEmail" th:text="#{memberEmail}"
+								class="form_label form_label_pdpl form_label_gray">
+							</label>
+							<div class="form_input form_input_pdpl">
+								<input type="email" id="memberEmail" name="memberEmail"
+									ng-model="memberEmail" ng-maxlength="128" class="form-control"
+									th:placeholder="#{memberEmail}"
+									autocomplete="off" ng-required="true">
+								<h5 class="text-danger" th:text="#{pleaseEnter} + #{memberEmail}"
+									ng-show="myForm.memberEmail.$error.required && myForm.memberEmail.$dirty">
+								</h5>
+								<h5 class="text-danger" th:text="#{memberEmailFormat}"
+									ng-show="!myForm.memberEmail.$error.required && myForm.memberEmail.$invalid && myForm.memberEmail.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<div class="form_group">
+							<label for="memberSpareEmail" th:text="#{memberSpareEmail}"
+								class="form_label form_label_pdpl form_label_gray">
+							</label>
+							<div class="form_input form_input_pdpl">
+								<input type="email" id="memberSpareEmail" name="memberSpareEmail"
+									ng-model="memberSpareEmail" ng-maxlength="128" class="form-control"
+									th:placeholder="#{memberSpareEmail}"
+									autocomplete="off" >
+								<h5 class="text-danger" th:text="#{memberEmailFormat}"
+									ng-show="myForm.memberSpareEmail.$invalid && myForm.memberSpareEmail.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<div class="form_group">
+							<label for="memberMobilePhone" th:text="#{memberMobilePhone}"
+								class="form_label form_label_pdpl form_label_gray">
+							</label>
+							<div class="form_input form_input_pdpl">
+								<input type="text" id="memberMobilePhone"
+									name="memberMobilePhone" ng-model="memberMobilePhone"
+									ng-maxlength="10" ng-minlength="10" ng-pattern="/^09\d{8}$/"
+									class="form-control"
+									th:placeholder="#{memberMobilePhone}"
+									autocomplete="off" pattern="[0-9]*" inputmode="numeric"
+									onkeypress="var key = window.event ? event.keyCode : event.which; return (key >= 48 && key <= 57) || key == 8">
+								<h5 class="text-danger" th:text="#{memberMobilePhoneFormat}"
+									ng-show="myForm.memberMobilePhone.$invalid && myForm.memberMobilePhone.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<div class="form_group">
+							<label for="CityPhone" th:text="#{memberCityPhone}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="memberCityPhone" name="memberCityPhone"
+									ng-model="memberCityPhone" class="form-control"
+									th:placeholder="#{memberCityPhone}"
+									autocomplete="off" ng-maxlength="25"/>				
+								<h5 class="text-danger" th:text="#{formatMaxLengthAfter(16)}"
+									ng-show="myForm.memberCityPhone.$error.maxlength && myForm.memberCityPhone.$dirty">
+
+								</h5>								
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<div class="form_group">
+							<label for="FaxPhone" th:text="#{memberFaxPhone}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="memberFaxPhone" name="memberFaxPhone"
+									ng-model="memberFaxPhone" class="form-control"
+									th:placeholder="#{memberFaxPhone}"
+									autocomplete="off" ng-maxlength="16"
+									ng-pattern="/^0\d{1,2}-\d{6,10}/" />
+				
+								<h5 class="validation-msg" th:text="#{phoneFormatErr}"
+									ng-show="!myForm.memberFaxPhone.$error.required && myForm.memberFaxPhone.$invalid && myForm.memberFaxPhone.$dirty">
+								</h5>
+								<h5 class="text-danger" th:text="#{formatMaxLengthAfter(16)}"
+									ng-show="myForm.memberFaxPhone.$error.maxlength && myForm.memberFaxPhone.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="Address" th:text="#{memberAddress}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="memberAddress" name="memberAddress"
+									ng-model="memberAddress" class="form-control"
+									th:placeholder="#{memberAddress}"
+									autocomplete="off" ng-maxlength="256" />
+								<h5 class="text-danger" th:text="#{formatMaxLengthAfter(256)}"
+									ng-show="myForm.memberAddress.$error.maxlength && myForm.memberAddress.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="Department" th:text="#{memberDepartment}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="memberDepartment" name="memberDepartment"
+									ng-model="memberDepartment" class="form-control"
+									th:placeholder="#{memberDepartment}"
+									autocomplete="off" ng-maxlength="128" />
+								<h5 class="text-danger" th:text="#{formatMaxLengthAfter(128)}"
+									ng-show="myForm.memberDepartment.$error.maxlength && myForm.memberDepartment.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="Title" th:text="#{memberPosition}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="memberTitle" name="memberTitle" ng-model="memberTitle"
+									class="form-control"
+									th:placeholder="#{memberPosition}"
+									autocomplete="off" ng-maxlength="128" />
+								<h5 class="text-danger" th:text="#{formatMaxLengthAfter(128)}"
+									ng-show="myForm.memberTitle.$error.maxlength && myForm.memberTitle.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<div class="form_group"></div>
+					</div>
+					
+					<div class="help-block"></div>
+					<div class="submit_bar">
+						<button class="btn btn_custom btn_blue" type="button"
+								ng-click="!myForm.$valid || updateData()"
+								ng-disabled="!myForm.$valid">
+							<i class="fas fa-fw fa-save"></i>
+							<th:block th:text="#{btnUpdate}"></th:block>
+						</button>
+					</div>
+
+				</form>
+			</div>		
+		</div>
+	</div>
+	
+	<div class="footer_space"></div>
+	<footer th:replace="/include/footer :: commonFooter"></footer>
+</body>
+</html>

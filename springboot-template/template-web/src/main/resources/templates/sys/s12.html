@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head th:replace="/include/head :: commonHead('sys')"></head>
+<script type="text/javascript" th:src="@{/js/sys/s12.js}"></script>
+<body class="index-login" ng-controller="getAppController" id="body">
+	<nav th:replace="/include/navbar_common :: navbarCommon" id="body"></nav>
+
+	<div id="divQuery" class="container">
+		<div class="row">
+			<div class="thumbnail">
+				<div class="caption">
+					<img class="img-responsive"	th:src="@{/images/icon_information.png}">
+					<h3 th:text="${appName}"></h3>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12 shadow_board">
+				<form name="queryForm">
+					<div>
+						&nbsp;
+						<div class="form_group">
+							<label for="QueryCode" th:text="#{s12QueryRole}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<select id="RoleId" name="RoleId" class="form-control"
+									ng-model="RoleId" ng-change="changeRole()"
+									ng-options="Role.Id as Role.Id+':'+Role.Name for Role in roles">
+									<option value="" selected th:text="#{s12Select}"></option>
+								</select>
+							</div>
+						</div>
+					</div>
+					&nbsp;
+					<div class="pull-right">
+						<div class="space-4"></div>
+						<div class="space-4"></div>
+						<div class="space-4"></div>
+						<button class="btn btn_custom btn_blue pull-right"
+								ng-hide="btnUpd" ng-disabled="!showInsert"
+								ng-click="btnUpdate();">
+							<i class="ace-icon fa fa-check "></i>
+							<span th:text="#{btnSave}"></span>
+						</button>
+						<div class="space-4"></div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="input-group pull-right">
+				<i class="fas fa-fw fa-search input-add"></i>
+				<input type="text" ng-model="search" />
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="table-responsive">
+				<table class="table table-striped table-bordered table-hover table_customer table_gray">
+					<thead>
+						<tr>
+							<th width="25%" th:text="#{s12subsystemName}"></th>
+							<th width="25%" th:text="#{s12Name}"></th>
+							<th width="10%">
+								<label for="selectReadAllorNone">
+									<input id="selectReadAllorNone"
+										ng-disabled="disableSelectReadAllorNone" type="checkbox"
+										class="" ng-model="selectReadAllorNone"
+										ng-click="changeSelectAllorNone(1)" ng-true-value="true"
+										ng-false-value="false">
+									<th:block th:text="#{s12ReadAllorNone}"></th:block>
+								</label>
+							</th>
+							<th width="10%">
+								<label for="selectInsAllorNone">
+									<input id="selectInsAllorNone"
+											ng-disabled="disableSelectInsAllorNone"
+											type="checkbox" class="" ng-model="selectInsAllorNone"
+											ng-click="changeSelectAllorNone(2)" ng-true-value="true"
+											ng-false-value="false">
+									<th:block th:text="#{s12InsAllorNone}"></th:block>		
+								</label>
+							</th>
+							<th width="10%">
+								<label for="selectUpdAllorNone">
+									<input id="selectUpdAllorNone"
+											ng-disabled="disableSelectUpdAllorNone"
+											type="checkbox" class="" ng-model="selectUpdAllorNone"
+											ng-click="changeSelectAllorNone(3)" ng-true-value="true"
+											ng-false-value="false">
+									<th:block th:text="#{s12UpdAllorNone}"></th:block>		
+								</label>
+							</th>
+							<th width="10%">
+								<label for="selectDelAllorNone">
+									<input id="selectDelAllorNone"
+											ng-disabled="disableSelectDelAllorNone"
+											type="checkbox" class="" ng-model="selectDelAllorNone"
+											ng-click="changeSelectAllorNone(4)" ng-true-value="true"
+											ng-false-value="false">
+									<th:block th:text="#{s12DelAllorNone}"></th:block>		
+								</label>
+							</th>
+							<th width="10%">
+								<label for="selectSignAllorNone">
+									<input id="selectSignAllorNone"
+											ng-disabled="disableSelectSignAllorNone" type="checkbox"
+											class="" ng-model="selectSignAllorNone"
+											ng-click="changeSelectAllorNone(5)" ng-true-value="true"
+											ng-false-value="false">
+									<th:block th:text="#{s12SignAllorNone}"></th:block>		
+								</label>
+							</th>
+						</tr>
+					</thead>
+
+					<tbody>
+						<tr ng-repeat="form in RoleForm | filter:search">
+							<td>{{form.SubsystemName}}</td>
+							<td>{{form.FormName}}</td>
+							<td class="text-center">
+								<label for="selectRead_{{form.FormId}}" style="width: 100%; height: 100%;">
+									<input id="selectRead_{{form.FormId}}"
+											ng-disabled="disableSelectRead_{{form.FormId}}"
+											type="checkbox" class="checkbox-primary"
+											ng-model="form.ActionRead"
+											ng-click="changeSelect(form.FormId)"
+											ng-true-value="true" ng-false-value="false">
+								</label>
+							</td>
+							<td class="text-center">
+								<label for="selectIns_{{form.FormId}}" style="width: 100%; height: 100%;">
+									<input id="selectIns_{{form.FormId}}"
+											ng-disabled="disableSelectIns_{{form.FormId}}"
+											type="checkbox" class="checkbox-primary"
+											ng-model="form.ActionCreate"
+											ng-click="changeSelect(form.FormId)"
+											ng-true-value="true" ng-false-value="false">
+								</label>
+							</td>
+							<td class="text-center">
+								<label for="selectUpd_{{form.FormId}}" style="width: 100%; height: 100%;">
+									<input id="selectUpd_{{form.FormId}}"
+											ng-disabled="disableSelectUpd_{{form.FormId}}"
+											type="checkbox" class="checkbox-primary"
+											ng-model="form.ActionUpdate"
+											ng-click="changeSelect(form.FormId)"
+											ng-true-value="true" ng-false-value="false">
+								</label>
+							</td>
+							<td class="text-center">
+								<label for="selectDel_{{form.FormId}}" style="width: 100%; height: 100%;">
+									<input id="selectDel_{{form.FormId}}"
+											ng-disabled="disableSelectDel_{{form.FormId}}"
+											type="checkbox" class="checkbox-primary"
+											ng-model="form.ActionDelete"
+											ng-click="changeSelect(form.FormId)"
+											ng-true-value="true" ng-false-value="false">
+								</label>
+							</td>
+							<td class="text-center">
+								<label for="selectSign_{{form.FormId}}" style="width: 100%; height: 100%;">
+									<input id="selectSign_{{form.FormId}}"
+											ng-disabled="disableSelectSign_{{form.FormId}}"
+											type="checkbox" class="checkbox-primary"
+											ng-model="form.ActionSign" ng-click="changeSelect(form.FormId)"
+											ng-true-value="true" ng-false-value="false">
+								</label>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	
+	<div class="footer_space"></div>
+	<footer th:replace="/include/footer :: commonFooter"></footer>
+</body>
+</html>

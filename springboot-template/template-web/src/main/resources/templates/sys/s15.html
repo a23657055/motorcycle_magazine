@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head th:replace="/include/head :: commonHead('sys')"></head>
+<script>
+	var actionSignSaveBtn = [[${actionSign}]];
+</script>
+<script type="text/javascript" th:src="@{/js/sys/s15.js}"></script>
+<body class="index-login" ng-controller="getAppController" id="body">
+	<nav th:replace="/include/navbar_common :: navbarCommon" id="body"></nav>
+
+	<div id="divQuery" class="container">
+		<div class="row">
+			<div class="thumbnail">
+				<div class="caption">
+					<img class="img-responsive" th:src="@{/images/icon_information.png}">
+					<h3 th:text="${appName}"></h3>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12 col-md-6 no_padding">
+				<div class="help-block"></div>
+				<span th:replace="/include/table_row_select"></span>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="table-responsive">
+				<table class="table table-striped table-bordered table-hover table_customer table_gray">
+					<thead>
+						<tr>
+							<th><a href="#" ng-click="setSortName('orgName')">
+								<th:block th:text="#{memberOrgName}"></th:block>
+								<i ng-show="sorttype != 'orgName'" class="fas fa-fw fa-sort text-muted"></i>
+								<i ng-show="sorttype == 'orgName' && !sortreverse" class="fas fa-fw fa-caret-down"></i>
+								<i ng-show="sorttype == 'orgName' && sortreverse" class="fas fa-fw fa-caret-up"></i>
+							</a></th>
+							<th><a href="#" ng-click="setSortName('account')">
+								<th:block th:text="#{memberAccount}"></th:block>
+								<i ng-show="sorttype != 'account'" class="fas fa-fw fa-sort text-muted"></i>
+								<i ng-show="sorttype == 'account' && !sortreverse" class="fas fa-fw fa-caret-down"></i>
+								<i ng-show="sorttype == 'account' && sortreverse" class="fas fa-fw fa-caret-up"></i>
+							</a></th>
+							<th><a href="#" ng-click="setSortName('memberName')">
+								<th:block th:text="#{memberName}"></th:block>
+								<i ng-show="sorttype != 'memberName'" class="fas fa-fw fa-sort text-muted"></i>
+								<i ng-show="sorttype == 'memberName' && !sortreverse" class="fas fa-fw fa-caret-down"></i>
+								<i ng-show="sorttype == 'memberName' && sortreverse" class="fas fa-fw fa-caret-up"></i>
+							</a></th>
+							<th th:if="${actionSign}" class="func">&nbsp;</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="item in allitems">
+							<td>{{item.OrgName}}</td>
+							<td>{{item.Account}}</td>
+							<td>{{item.Name}}</td>
+							<td th:if="${actionSign}" class="text-center">
+								<a class="btn btn-sm btn-primary" ng-click="editData(item.Id);"
+										th:title="#{btnSignApply}" th:if="${actionSign}">
+									<i class="fas fa-fw fa-edit"></i>
+									<th:block th:text="#{btnSignApply}"></th:block>	
+								</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			
+			<span th:replace="/include/table_row_empty"></span>
+			
+			<div class="text-center">
+				<paging class="pagination" page="currentPage" page-size="maxRows"
+					total="total" show-prev-next="true" show-first-last="true"
+					text-next-class="fas fa-step-forward"
+					text-prev-class="fas fa-step-backward"
+					text-first-class="fas fa-fast-backward"
+					text-last-class="fas fa-fast-forward"
+					paging-action="queryData(page)"></paging>
+			</div>
+		</div>
+	</div>
+	
+	<div id="divEdit" class="container" ng-show="btnSign">
+		<div class="row">
+			<h4 class="form_heading form_heading_fix form_heading_gray" ng-show="btnSign">
+				<big><i class="fas fa-fw fa-edit fa-lg"></i></big>
+				<b th:text="#{btnEdit}"></b>
+			</h4>
+			<div class="col-xs-12 shadow_board">
+				<form name="editForm">
+					<div>
+						<div class="form_group">
+							<label for="OrgName" th:text="#{memberOrgName}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<span>{{OrgName}}</span>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="OrgParentLocalName" th:text="#{orgType3SuperviseName}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<span>{{OrgSuperviseName}}</span>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="OrgName" th:text="#{orgType3LocalName}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<span>{{OrgLocalName}}</span>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="Account" th:text="#{memberAdminAccount}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<span>{{Account}}</span>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="Name" th:text="#{memberAdminName}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<span>{{Name}}</span>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="Email" th:text="#{memberAdminEmail}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<span>{{Email}}</span>
+						</div>
+					</div>
+					<div>
+						<div class="form_group">
+							<label for="MobilePhone" th:text="#{memberAdminMobilePhone}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<span>{{MobilePhone}}</span>
+						</div>
+					</div>
+					<div>
+						<div class="form_group">
+							<label for="CreateTime" th:text="#{memberSignUpDatetime}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<span>{{CreateTime}}</span>
+						</div>
+					</div>
+					<div>
+						<div class="form_group"></div>
+					</div>
+					<div class="help-block"></div>
+					
+					<div class="submit_bar">
+						<button class="btn btn_custom btn_blue" type="button"
+								ng-click="!editForm.$valid || signData()"
+								ng-disabled="!editForm.$valid" ng-show="LocalActionSign && btnSign">
+							<i class="fas fa-fw fa-check"></i>
+							<th:block th:text="#{btnSignApplyPass}"></th:block>
+						</button>
+						<button class="btn btn_custom btn_gray" type="button" ng-click="closeEdit()">
+							<i class="fas fa-fw fa-undo"></i>
+							<th:block th:text="#{btnReturn}"></th:block>
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	<div class="footer_space"></div>
+	<footer th:replace="/include/footer :: commonFooter"></footer>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<footer id="footer" th:fragment="commonFooter">
+	<div class="footer-info">
+		<div class="container">
+			<div class="row">
+				<ul class="list-group col-xs-12 col-sm-6 col-md-6">
+					<li class="list-group-item">
+						<span th:text="#{globalFooterAddress}" /> : <span th:text="${globalFooterAddressText}" />
+					</li>
+					<li class="list-group-item">
+						<span th:text="#{globalFooterTel}" /> : <span th:text="${globalFooterTelText}" />
+					</li>
+					<li class="list-group-item">
+						<span th:text="#{globalFooterEmail}" /> : <span th:text="${globalFooterEmail}" />
+					</li>
+				</ul>
+				<ul class="list-group col-xs-12 col-sm-6 col-md-6 info-right">
+					<li class="list-group-item">
+						<span th:text="#{globalTotalUser}" /> : <span th:text="${totalUser}" />
+					</li>
+					<li class="list-group-item">
+						<span th:text="#{globalNowUser}" /> : <span th:text="${nowUser}" />
+					</li>
+<!-- 					<li class="list-group-item"> -->
+<!-- 						<a th:href="@{/about}" th:text="#{globalAbout}"></a> -->
+<!-- 					</li> -->
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="copyright">
+		<div class="container">
+			<p>
+				&copy; 2019&nbsp;
+				<span th:text="#{globalCopyright}" />
+				，
+				<span th:text="#{globalOptimalWindowSize}" />
+			</p>
+		</div>
+	</div>
+</footer>
+
+</html>

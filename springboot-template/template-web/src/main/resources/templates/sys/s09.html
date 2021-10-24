@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head th:replace="/include/head :: commonHead('sys')"></head>
+<script>
+	var actionCreateSaveBtn = [[${actionCreate}]];
+	var actionUpdateSaveBtn = [[${actionUpdate}]];
+</script>
+<script type="text/javascript" th:src="@{/js/sys/s09.js}"></script>
+<body class="index-login" ng-controller="getAppController" id="body">
+	<nav th:replace="/include/navbar_common :: navbarCommon" id="body"></nav>
+
+	<div id="divQuery" class="container">
+		<div class="row">
+			<div class="thumbnail">
+				<div class="caption">
+					<img class="img-responsive"	th:src="@{/images/icon_information.png}">
+					<h3 th:text="${appName}"></h3>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12 shadow_board">
+				<form name="queryForm">
+					<div>
+						<div class="form_group">
+							<label for="QueryId" th:text="#{s09Id}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="QueryId" name="QueryId"
+									ng-model="QueryId" class="form-control"
+									th:placeholder="#{s09Id}"
+									autocomplete="off">
+							</div>
+						</div>
+					</div>
+				
+					<div>
+						<div class="form_group">
+							<label for="QueryCode" th:text="#{s09MessageKey}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="QueryMessageKey" name="QueryMessageKey"
+									ng-model="QueryMessageKey" class="form-control"
+									th:placeholder="#{s09MessageKey}"
+									autocomplete="off">
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="QueryName" th:text="#{s09MessageValue}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="QueryMessageValue" name="QueryMessageValue"
+									ng-model="QueryMessageValue" class="form-control"
+									th:placeholder="#{s09MessageValue}"
+									autocomplete="off">
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group"></div>
+					</div>
+					<div class="help-block"></div>
+					
+					<div class="submit_bar">
+						<button class="btn btn_custom btn_blue" type="button" ng-click="queryData()">
+							<i class="fas fa-fw fa-search"></i>
+							<th:block th:text="#{btnSearch}"></th:block>
+						</button>
+						<button class="btn btn_custom btn_gray" type="button" ng-click="clearData()">
+							<i class="fas fa-fw fa-redo-alt"></i>
+							<th:block th:text="#{btnReset}"></th:block>
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="thumbnail">
+				<div class="caption">
+					<img class="img-responsive" th:src="@{/images/icon_search.png}">
+					<h3 th:text="#{globalSearchResult}"></h3>
+					<a class="btn btn_custom btn_blue pull-right" type="button"
+						ng-click="openEdit()" th:if="${actionCreate}">
+						<i class="fas fa-fw fa-plus-circle"></i>
+						<th:block th:text="#{btnCreate}"></th:block>
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12 col-md-6 no_padding">
+				<div class="help-block"></div>
+				<span th:replace="/include/table_row_select"></span>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="table-responsive">
+				<table class="table table-striped table-bordered table-hover table_customer table_gray">
+					<thead>
+						<tr>
+							<th><a href="#" ng-click="setSortName('id')">
+								<th:block th:text="#{s09Id}"></th:block>
+								<i ng-show="sorttype != 'id'" class="fas fa-fw fa-sort text-muted"></i>
+								<i ng-show="sorttype == 'id' && !sortreverse" class="fas fa-fw fa-caret-down"></i>
+								<i ng-show="sorttype == 'id' && sortreverse" class="fas fa-fw fa-caret-up"></i>
+							</a></th>
+							
+							<th><a href="#" ng-click="setSortName('language')">
+								<th:block th:text="#{s09Language}"></th:block>
+								<i ng-show="sorttype != 'language'" class="fas fa-fw fa-sort text-muted"></i>
+								<i ng-show="sorttype == 'language' && !sortreverse" class="fas fa-fw fa-caret-down"></i>
+								<i ng-show="sorttype == 'language' && sortreverse" class="fas fa-fw fa-caret-up"></i>
+							</a></th>
+						
+							<th><a href="#" ng-click="setSortName('messageKey')">
+								<th:block th:text="#{s09MessageKey}"></th:block>
+								<i ng-show="sorttype != 'messageKey'" class="fas fa-fw fa-sort text-muted"></i>
+								<i ng-show="sorttype == 'messageKey' && !sortreverse" class="fas fa-fw fa-caret-down"></i>
+								<i ng-show="sorttype == 'messageKey' && sortreverse" class="fas fa-fw fa-caret-up"></i>
+							</a></th>
+							
+							<th><a href="#" ng-click="setSortName('messageValue')">
+								<th:block th:text="#{s09MessageValue}"></th:block>
+								<i ng-show="sorttype != 'messageValue'" class="fas fa-fw fa-sort text-muted"></i>
+								<i ng-show="sorttype == 'messageValue' && !sortreverse" class="fas fa-fw fa-caret-down"></i>
+								<i ng-show="sorttype == 'messageValue' && sortreverse" class="fas fa-fw fa-caret-up"></i>
+							</a></th>
+							
+							<th th:if="${actionUpdate && actionDelete}" class="func">&nbsp;</th>
+						</tr>
+					</thead>
+					
+					<tbody>
+						<tr ng-repeat="item in allitems">
+							<td>{{item.Id}}</td>
+							<td>{{item.Language}}</td>						
+							<td>{{item.MessageKey}}</td>
+							<td>{{item.MessageValue}}</td>
+							<td th:if="${actionUpdate && actionDelete}" class="text-center">
+								<a class="btn btn-sm btn-primary" ng-click="editData(item.Id);"
+										th:title="#{btnEdit}" th:if="${actionUpdate}">
+									<i class="fas fa-fw fa-edit"></i>
+									<th:block th:text="#{btnEdit}"></th:block>
+								</a>
+								<br />
+								<a href="#" class="btn btn-sm btn-info" ng-click="deleteData(item.Id);"
+										th:if="${actionDelete}">
+									<i class="far fa-fw fa-trash-alt"></i>
+									<th:block th:text="#{btnDelete}"></th:block>
+								</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			
+			<span th:replace="/include/table_row_empty"></span>
+
+			<div class="text-center">
+				<paging class="pagination" page="currentPage" page-size="maxRows"
+					total="total" show-prev-next="true" show-first-last="true"
+					text-next-class="fas fa-step-forward"
+					text-prev-class="fas fa-step-backward"
+					text-first-class="fas fa-fast-backward"
+					text-last-class="fas fa-fast-forward"
+					paging-action="queryData(page)"></paging>
+			</div>
+		</div>
+	</div>
+
+	<div id="divEdit" class="container" ng-show="btnIns || btnUpd">
+		<div class="row">
+			<h4 class="form_heading form_heading_fix form_heading_gray" ng-show="btnIns">
+				<big><i class="fas fa-fw fa-plus-circle fa-lg"></i></big>
+				<b th:text="#{btnCreate}"></b>
+			</h4>
+			<h4 class="form_heading form_heading_fix form_heading_gray" ng-show="btnUpd">
+				<big><i class="fas fa-fw fa-edit fa-lg"></i></big>
+				<b th:text="#{btnEdit}"></b>
+			</h4>
+
+			<div class="col-xs-12 shadow_board">
+				<form name="editForm">
+					<div>
+						<div class="form-group row">
+							<label for="Language" class="form_label form_label_search form_label_gray">
+								<span th:text="#{s09Language}"></span>
+							</label>
+							<div class="form_input form_input_search" ng-show="btnUpd">{{Language}}</div>
+							<div class="form_input form_input_search" ng-show="btnIns">
+								<select id="Language"  name="Language" ng-model="Language"
+									class="form-control" ng-options="lang.Id as lang.Name for lang in languages">
+								</select>
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<div class="form_group">
+							<label for="Code" class="form_label form_label_search form_label_gray">
+								<p style="font-size:10px; color:red; display:inline;">(*必填)</p>
+								<th:block th:text="#{s09MessageKey}"></th:block>
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="MessageKey" name="MessageKey" ng-model="MessageKey"
+									class="form-control"
+									th:placeholder="#{s09MessageKey}"
+									autocomplete="off" ng-required="true" ng-maxlength="128">
+								<h5 class="text-danger" th:text="#{pleaseEnter}+#{s09MessageKey}"
+									ng-show="editForm.MessageKey.$error.required && editForm.MessageKey.$dirty">
+								</h5>	
+								<h5 class="text-danger" th:text="#{formatMaxLengthAfter(128)}"
+									ng-show="editForm.MessageKey.$error.maxlength && editForm.MessageKey.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<div class="form_group">
+							<label for="Name" class="form_label form_label_search form_label_gray">
+								<p style="font-size:10px; color:red; display:inline;">(*必填)</p>
+								<th:block th:text="#{s09MessageValue}"></th:block>
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="MessageValue" name="MessageValue" ng-model="MessageValue"
+									class="form-control"
+									th:placeholder="#{s09MessageValue}"
+									autocomplete="off" ng-required="true">
+								<h5 class="text-danger" th:text="#{pleaseEnter}+#{s09MessageValue}"
+									ng-show="editForm.MessageValue.$error.required && editForm.MessageValue.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<div class="form_group"></div>
+					</div>
+					<div class="help-block"></div>
+					
+					<div class="submit_bar">
+						<button class="btn btn_custom btn_blue" type="button"
+								ng-click="!editForm.$valid || createData()"
+								ng-disabled="!editForm.$valid"
+								ng-show="LocalActionCreate && btnIns">
+							<i class="fas fa-fw fa-save"></i>
+							<th:block th:text="#{btnSave}"></th:block>
+						</button>
+						<button class="btn btn_custom btn_blue" type="button"
+								ng-click="!editForm.$valid || updateData()"
+								ng-disabled="!editForm.$valid"
+								ng-show="LocalActionUpdate && btnUpd">
+							<i class="fas fa-fw fa-save"></i>
+							<th:block th:text="#{btnSave}"></th:block>
+						</button>
+						<button class="btn btn_custom btn_gray" type="button" ng-click="closeEdit()">
+							<i class="fas fa-fw fa-undo"></i>
+							<th:block th:text="#{btnReturn}"></th:block>
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+		
+	<div class="footer_space"></div>
+	<footer th:replace="/include/footer :: commonFooter"></footer>
+</body>
+</html>

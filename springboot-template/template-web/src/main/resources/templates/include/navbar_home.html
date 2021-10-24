@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<nav th:fragment="navbarHome">
+	<div class="logbar">
+		<div class="container">
+			<div class="navbar-collapse">
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown">
+						<a th:href="@{/index}" class="logbtn">
+							<span th:text="#{globalGoToHomepage}"></span>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="navbar" style="margin-bottom: 20px;">
+		<div class="container">
+			<div class="navbar-collapse">
+				<!-- Logo -->
+				<a th:href="@{/index}">
+					<ul class="nav navbar-nav">
+						<li class="logo">
+							<img class="img-responsive" th:src="@{/images/logo.svg}" />
+							<span></span>
+						</li>
+						<li class="" style="margin-left: .5rem;">
+							<div class="logo-center" style="height: 90px;color:#fff;">
+								<h2 style="font-size: 20px;margin: 0;font-weight: bold;" th:text="#{globalMainRegion}+#{globalMainTitle}"></h2>
+								<h4 style="font-size: 18px;margin: 0;" th:text="#{globalSubTitle}"></h4>
+							</div>
+						</li>
+					</ul>
+				</a>
+			</div>
+		</div>
+	</div>
+
+</nav>
+</html>
+

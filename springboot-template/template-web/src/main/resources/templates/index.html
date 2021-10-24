@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head th:replace="/include/head_index :: headIndex(#{globalHomepage})"></head>
+<script type="text/javascript">
+	var loginLogin = "[[#{loginLogin}]]";
+	var loginFail = "[[#{loginFail}]]";
+</script>
+<script type="text/javascript" th:src="@{/js/index.js}"></script>	
+
+<body ng-app="myApp">
+	<nav th:replace="/include/navbar_login :: navbarLogin"></nav>
+	<div class="jumbotron banner">
+		<div class="bn-bg">
+			<img class="img-responsive bn-photo" th:src="@{/images/bn.png}">
+			<img class="img-responsive bn-cover" th:src="@{/images/bn-cover.png}">
+		</div>
+		<div class="bn-title">
+			<h1 style="font-size: 2.25rem" th:text="#{globalMainRegion}"></h1>
+			<h1 th:text="#{globalMainTitle}"></h1>
+		</div>
+	</div>
+	
+	<div ng-controller="getAppController" class="container">
+		<div class="row">
+
+		</div>
+	</div>
+	
+	<footer th:replace="/include/footer :: commonFooter"></footer>
+</body>
+</html>

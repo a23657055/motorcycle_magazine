@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head th:replace="/include/head :: commonHead('sys')"></head>
+<script type="text/javascript" th:src="@{/js/sys/reload_resource.js}"></script>	
+
+<body class="index-login" id="body">
+	<nav th:replace="/include/navbar_common :: navbarCommon"></nav>
+	
+	<div id="divEdit" class="container">
+		<h2 th:text="123"></h2>
+	</div>
+	
+	<div class="footer_space"></div>
+	<footer th:replace="/include/footer :: commonFooter"></footer>
+</body>
+</html>

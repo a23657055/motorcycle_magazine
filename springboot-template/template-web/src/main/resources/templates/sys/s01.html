@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head th:replace="/include/head :: commonHead('sys')"></head>
+<script>
+	var actionCreateSaveBtn = [[${actionCreate}]];
+	var actionUpdateSaveBtn = [[${actionUpdate}]];
+</script>
+
+<style>
+	.style1{
+		width: 95%!important;
+		margin:0px 2.5% 0px 2.5%;
+	}
+
+</style>
+<script type="text/javascript" th:src="@{/js/sys/s01.js}"></script>
+<body class="index-login" ng-controller="getAppController" id="body">
+
+	<div id="divQuery" class="container style1">
+	
+		</br>
+		
+		<h1 align="center">新增子頁面</h1>
+		
+		</br>
+		
+		<div class="row">
+			<div class="thumbnail">
+				<div class="caption">
+					<img class="img-responsive"	th:src="@{/images/icon_information.png}">
+					<h3 th:text="新增子頁面"></h3>
+					<a class="btn btn_custom btn_blue pull-right" type="button"
+							ng-click="openEdit()" th:if="${actionCreate}">
+						<i class="fas fa-fw fa-plus-circle"></i>
+						<span th:text="#{btnCreate}"></span>
+					</a>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-xs-12 col-md-6 no_padding">
+				<div class="help-block"></div>
+				<span th:replace="/include/table_row_select"></span>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="table-responsive">
+				<table class="table table-striped table-bordered table-hover table_customer table_gray">
+					<thead>
+						<tr>
+							<th width="19%"><a href="#" ng-click="setSortName('code')">
+								<th:block th:text="子頁面代碼"></th:block>
+								<i ng-show="sorttype != 'code'" class="fas fa-fw fa-sort text-muted"></i>
+								<i ng-show="sorttype == 'code' && !sortreverse" class="fas fa-fw fa-caret-down"></i>
+								<i ng-show="sorttype == 'code' && sortreverse" class="fas fa-fw fa-caret-up"></i>
+							</a></th>
+							
+							<th width="19%"><a href="#" ng-click="setSortName('name')">
+								<th:block th:text="子頁面名稱"></th:block>
+								<i ng-show="sorttype != 'name'" class="fas fa-fw fa-sort text-muted"></i>
+								<i ng-show="sorttype == 'name' && !sortreverse" class="fas fa-fw fa-caret-down"></i>
+								<i ng-show="sorttype == 'name' && sortreverse" class="fas fa-fw fa-caret-up"></i>
+							</a></th>
+							
+							<th width="19%"><a href="#" ng-click="setSortName('isEnable')">
+								<th:block th:text="#{isEnable}"></th:block>
+								<i ng-show="sorttype != 'isEnable'" class="fas fa-fw fa-sort text-muted"></i>
+								<i ng-show="sorttype == 'isEnable' && !sortreverse" class="fas fa-fw fa-caret-down"></i>
+								<i ng-show="sorttype == 'isEnable' && sortreverse" class="fas fa-fw fa-caret-up"></i>
+							</a></th>
+							
+							<th width="19%"><a href="#" ng-click="setSortName('sort')">
+								<th:block th:text="排序左至右"></th:block>
+								<i ng-show="sorttype != 'sort'" class="fas fa-fw fa-sort text-muted"></i>
+								<i ng-show="sorttype == 'sort' && !sortreverse" class="fas fa-fw fa-caret-down"></i>
+								<i ng-show="sorttype == 'sort' && sortreverse" class="fas fa-fw fa-caret-up"></i>
+							</a></th>
+							
+							<th width="19%"><a href="#">
+								<th:block th:text="操作"></th:block>
+								<i ng-show="sorttype != 'sort'" class="fas fa-fw fa-sort text-muted"></i>
+								<i ng-show="sorttype == 'sort' && !sortreverse" class="fas fa-fw fa-caret-down"></i>
+								<i ng-show="sorttype == 'sort' && sortreverse" class="fas fa-fw fa-caret-up"></i>
+							</a></th>
+							
+						</tr>
+					</thead>
+
+					<tbody>
+						<tr ng-repeat="item in allitems">
+							<td>{{item.Code}}</td>
+							<td>{{item.Name}}</td>
+							
+							<td class="text-center">
+								<span ng-show="{{item.IsEnable}}">
+									<i class="far fa-fw fa-check-circle text-success" th:title="#{isEnableTrue}"></i>
+									<th:block th:text="#{isEnableTrue}"></th:block>
+								</span>
+								<span ng-show="{{!item.IsEnable}}">
+									<i class="fas fa-fw fa-minus-circle text-danger" th:title="#{isEnableFalse}"></i>
+									<th:block th:text="#{isEnableFalse}"></th:block>
+								</span>
+							</td>
+							<td class="text-right">{{item.Sort}}</td>
+							<td th:if="${actionUpdate && actionDelete}" class="text-center">
+								<a class="btn btn-sm btn-primary" ng-click="editData(item.Id);"
+										th:title="#{btnEdit}" th:if="${actionUpdate}">
+									<i class="fas fa-fw fa-edit"></i>
+									<th:block th:text="#{btnEdit}"></th:block>
+								</a>
+								<br />
+								<a href="#" class="btn btn-sm btn-info"
+										ng-click="deleteData(item.Id);" th:if="${actionDelete}">
+									<i class="far fa-fw fa-trash-alt"></i>
+									<th:block th:text="#{btnDelete}"></th:block>
+								</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<span th:replace="/include/table_row_empty"></span>
+			
+			<div class="text-center">
+				<paging class="pagination" page="currentPage" page-size="maxRows"
+					total="total" show-prev-next="true" show-first-last="true"
+					text-next-class="fas fa-step-forward"
+					text-prev-class="fas fa-step-backward"
+					text-first-class="fas fa-fast-backward"
+					text-last-class="fas fa-fast-forward"
+					paging-action="queryData(page)"></paging>
+			</div>
+		</div>		
+	</div>
+
+	<div id="divEdit" class="container" ng-show="btnIns || btnUpd">
+	
+		</br>
+		
+		<h1 align="center">新增子頁面</h1>
+		
+		</br>
+	
+		<div class="row">
+			<h4 class="form_heading form_heading_fix form_heading_gray" ng-show="btnIns">
+				<big><i class="fas fa-fw fa-plus-circle fa-lg"></i></big>
+				<b th:text="#{btnCreate}"></b>
+			</h4>
+			<h4 class="form_heading form_heading_fix form_heading_gray" ng-show="btnUpd">
+				<big><i class="fas fa-fw fa-edit fa-lg"></i></big>
+				<b th:text="#{btnEdit}"></b>
+			</h4>
+
+			<div class="col-xs-12 shadow_board">
+				<form name="editForm">
+					<div>
+						<div class="form_group">
+							<label for="Code" class="form_label form_label_search form_label_gray">
+								<p style="font-size:10px; color:red; display:inline;">(*必填)</p>
+								<th:block th:text="#{subsystemCode}"></th:block>
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="Code" name="Code" ng-model="Code" class="form-control"
+									th:placeholder="#{subsystemCode}"
+									autocomplete="off" ng-required="true" ng-maxlength="8"
+									ng-pattern="/^[a-zA-Z0-9]{0,8}$/">
+								<h5 class="text-danger" th:text="#{pleaseEnter}+#{subsystemCode}"
+									ng-show="editForm.Code.$error.required && editForm.Code.$dirty">
+								</h5>
+								<h5 class="text-danger" th:text="#{subsystemCodeFormat}"
+									ng-show="!editForm.Code.$error.required && editForm.Code.$invalid && editForm.Code.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<div class="form_group">
+							<label for="Name" class="form_label form_label_search form_label_gray">
+								<p style="font-size:10px; color:red; display:inline;">(*必填)</p>
+								<th:block th:text="#{subsystemName}"></th:block>
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="Name" name="Name" ng-model="Name"
+									class="form-control"
+									th:placeholder="#{subsystemName}"
+									autocomplete="off" ng-required="true">
+								<h5 class="text-danger" th:text="#{pleaseEnter}+#{subsystemName}"
+									ng-show="editForm.Name.$error.required && editForm.Name.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+					
+					<div>
+						<div class="form_group">
+							<label for="Sort" class="form_label form_label_search form_label_gray">
+								<p style="font-size:10px; color:red; display:inline;">(*必填)</p>
+								<th:block th:text="#{sort}"></th:block>
+							</label>
+							<div class="form_input form_input_search_half">
+								<input type="number" id="Sort" name="Sort" ng-model="Sort"
+									class="form-control" th:placeholder="#{sort}"
+									autocomplete="off" pattern="[0-9]*" inputmode="numeric" min="0"
+									onkeypress="var key = window.event ? event.keyCode : event.which; return (key >= 48 && key <= 57) || key == 8"
+									ng-required="true">
+								<h5 class="text-danger" th:text="#{pleaseEnter}+#{sort}"
+									ng-show="editForm.Sort.$error.required && editForm.Sort.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<div class="form_group">
+							<label for="IsEnable" th:text="#{isEnable}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search_half">
+								<toggle ng-model="IsEnable" ng-init="IsEnable=true"
+									th:on="#{toggleIsEnableTrue}"
+									th:off="#{toggleIsEnableFalse}"
+									onstyle="btn-success" offstyle="btn-danger"></toggle>
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<div class="form_group"></div>
+					</div>
+					<div class="help-block"></div>
+
+					<div class="submit_bar">
+						<button class="btn btn_custom btn_blue" type="button"
+							ng-click="!editForm.$valid || createData()"
+							ng-disabled="!editForm.$valid"
+							ng-show="LocalActionCreate && btnIns">
+							<i class="fas fa-fw fa-save"></i>
+							<th:block th:text="#{btnSave}"></th:block>
+						</button>
+						<button class="btn btn_custom btn_blue" type="button"
+								ng-click="!editForm.$valid || updateData()"
+								ng-disabled="!editForm.$valid"
+								ng-show="LocalActionUpdate && btnUpd">
+							<i class="fas fa-fw fa-save"></i>
+							<th:block th:text="#{btnSave}"></th:block>
+						</button>
+						
+						<button class="btn btn_custom btn_gray" type="button"
+								ng-click="closeEdit()">
+							<i class="fas fa-fw fa-undo"></i>
+							<th:block th:text="#{btnReturn}"></th:block>
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<div class="footer_space"></div>
+	<footer th:replace="/include/footer :: commonFooter"></footer>
+</body>
+</html>

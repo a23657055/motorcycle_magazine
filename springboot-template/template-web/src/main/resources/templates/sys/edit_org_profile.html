@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head th:replace="/include/head :: commonHead('sys')"></head>
+<script type="text/javascript" th:src="@{/js/sys/edit_org_profile.js}"></script>	
+<script type="text/javascript" th:src="@{/plugins/jquery.twzipcode.min.js}"></script>	
+<body class="index-login" ng-controller="getAppController" id="body">
+	<nav th:replace="/include/navbar_common :: navbarCommon"></nav>
+
+	<div id="divEdit" class="container">
+		<div class="row">
+			<div class="thumbnail">
+				<div class="caption">
+					<img class="img-responsive"	th:src="@{/images/icon_profiles.png}">
+					<h3 th:text="${appName}"></h3>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 shadow_board">
+				<form name="editForm">
+				
+					<div>
+						<div class="form_group">
+							<label for="Name" th:text="#{orgName}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="Name" name="Name" ng-model="Name"
+									class="form-control" ng-maxlength="50" th:placeholder="#{orgName}"
+									autocomplete="off" ng-required="true">
+								<h5 class="text-danger" th:text="#{pleaseEnter} + #{orgName}"
+									ng-show="editForm.Name.$error.required && editForm.Name.$dirty">
+								</h5>
+								<h5 class="text-danger" th:text="#{formatMaxLengthAfter(50)}"
+									ng-show="editForm.Name.$error.maxlength && editForm.Name.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<div class="form_group">
+							<label for="Code" th:text="#{orgCode}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="Code" name="Code" ng-model="Code"
+									class="form-control"
+									th:placeholder="#{orgCode}"
+									autocomplete="off" ng-required="true" ng-maxlength="16" />
+								<h5 class="text-danger" th:text="#{pleaseEnter} + #{orgCode}"
+									ng-show="editForm.Code.$error.required && editForm.Code.$dirty">
+								</h5>
+								<h5 class="text-danger" th:text="#{formatMaxLengthAfter(16)}"
+									ng-show="editForm.Code.$error.maxlength && editForm.Code.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<div class="form_group">
+							<label for="Tel" th:text="#{orgTel}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="Tel" name="Tel" ng-model="Tel"
+									class="form-control" th:placeholder="#{orgTel}"
+									autocomplete="off" ng-maxlength="15"
+									ng-pattern="/^0\d{1,2}-\d{6,10}/" />
+								<h5 class="text-danger" th:text="#{formatMaxLengthAfter(15)}"
+									ng-show="editForm.Tel.$error.maxlength && editForm.Tel.$dirty">
+								</h5>
+								<h5 class="validation-msg" th:text="#{phoneFormatErr}"
+									ng-show="editForm.Tel.$invalid && editForm.Tel.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<div class="form_group">
+							<label for="Fax" th:text="#{orgFax}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="Fax" name="Fax" ng-model="Fax"
+									class="form-control" th:placeholder="#{orgFax}"
+									autocomplete="off" ng-maxlength="15"
+									ng-pattern="/^0\d{1,2}-\d{6,10}/" />
+								<h5 class="text-danger" th:text="#{formatMaxLengthAfter(15)}"
+									ng-show="editForm.Fax.$error.maxlength && editForm.Fax.$dirty">
+								</h5>
+								<h5 class="validation-msg" th:text="#{phoneFormatErr}"
+									ng-show="editForm.Fax.$invalid && editForm.Fax.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<div class="form_group">
+							<label for="OrgType" th:text="#{orgType}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<select id="OrgType" name="OrgType" ng-model="OrgType" ng-required="true"
+									class="form-control col-xs-6">
+									<option value="0">0_admin</option>
+									<option value="1">1_HISAC</option>
+									<option value="2">2_權責單位</option>
+									<option value="3">3_會員單位</option>
+								</select>
+								<h5 class="text-danger" th:text="#{pleaseEnter} + #{orgType}"
+									ng-show="editForm.OrgType.$error.required && editForm.OrgType.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<div class="form_group">
+							<label for="AuthType" th:text="#{orgAuthType}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<select id="AuthType" name="AuthType" ng-model="AuthType" ng-required="true"
+									class="form-control col-xs-6">
+									<option value="0">0_非權責單位</option>
+									<option value="1">1_業務主管機關</option>
+									<option value="2">2_隸屬主管機關</option>
+								</select>
+								<h5 class="text-danger" th:text="#{pleaseEnter} + #{orgAuthType}"
+									ng-show="editForm.AuthType.$error.required && editForm.AuthType.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+
+					<div class="form_group">
+						<label class="form_label form_label_search form_label_gray" for="file">地址</label>
+						<div class="form_input form_input_search">
+							<label for="orgAddress" class="sr-only" th:text="#{orgAddress}"></label>
+							<div class="input-group">
+								<div id="twzipcode"></div>
+								<script>
+									$("#twzipcode").twzipcode({
+										"zipcodeIntoDistrict" : true,
+										"css" : [
+											"city form-control",
+											"town form-control"
+										],
+										"countyName" : "city",
+										"districtName" : "town"
+									});
+								</script>
+								<input type="text" id="orgAddress" name="orgAddress" ng-model="Address"
+									class="form-control" th:placeholder="#{orgAddress}"
+									autocomplete="off" ng-maxlength="256" ng-required="true"/>
+								<h5 class="text-danger" ng-show="editForm.orgCity.$error.required && editForm.orgCity.$dirty">
+									縣市不得為空
+								</h5>
+								<h5 class="text-danger" ng-show="editForm.orgAddress.$error.required && editForm.Fax.$dirty">
+									地址不得為空
+								</h5>
+								<h5 class="text-danger" ng-show="editForm.orgAddress.$error.maxlength && editForm.Fax.$dirty">
+									地址不可超過20個字元
+								</h5>
+								<input type="text" id="orgCity" name="orgCity" ng-model="City"
+									class="form-control" th:placeholder="#{orgCity}"
+									autocomplete="off" ng-maxlength="10" ng-required="true" style="display: none;"/>
+								<input type="text" id="orgTown" name="orgTown" ng-model="Town"
+									class="form-control" th:placeholder="#{orgTown}"
+									autocomplete="off" ng-maxlength="10" ng-required="true" style="display: none;"/>
+							</div>
+							
+							<div>
+								<div class="form_group"></div>
+							</div>
+							<div class="help-block"></div>
+							
+							<div class="submit_bar">
+								<button class="btn btn_custom btn_blue" type="button"
+										ng-click="!editForm.$valid || updateData()"
+										ng-disabled="!editForm.$valid">
+									<i class="fas fa-fw fa-save"></i>
+									<th:block th:text="#{btnUpdate}"></th:block>
+								</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<div class="footer_space"></div>
+	<footer th:replace="/include/footer :: commonFooter"></footer>
+</body>
+</html>

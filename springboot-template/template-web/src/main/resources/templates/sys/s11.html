@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head th:replace="/include/head :: commonHead('sys')"></head>
+<script>
+	var actionCreateSaveBtn = [[${actionCreate}]];
+	var actionUpdateSaveBtn = [[${actionUpdate}]];
+</script>
+<script type="text/javascript" th:src="@{/js/sys/s11.js}"></script>
+<body class="index-login" ng-controller="getAppController" id="body">
+	<nav th:replace="/include/navbar_common :: navbarCommon" id="body"></nav>
+
+	<div id="divQuery" class="container">
+		<div class="row">
+			<div class="thumbnail">
+				<div class="caption">
+					<img class="img-responsive"	th:src="@{/images/icon_information.png}">
+					<h3 th:text="${appName}"></h3>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12 shadow_board">
+				<form name="queryForm">
+					<div>
+						<div class="form_group">
+							<label for="Id" th:text="#{s11Id}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="QueryId" name="QueryId"
+									ng-model="QueryId" class="form-control"
+									th:placeholder="#{s11Id}" autocomplete="off">
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<div class="form_group">
+							<label for="SubsystemId" th:text="#{s11subsystemName}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<select id="QuerySubsystemId" name="QuerySubsystemId"
+									ng-model="QuerySubsystemId" class="form-control col-xs-6"
+									ng-options="Subsystem.Id as Subsystem.Id+':'+Subsystem.Name  for  Subsystem in subsystems">
+									<option value="" selected th:text="#{all}"></option>
+								</select>
+							</div>
+						</div>
+					</div>
+
+
+					<div>
+						<div class="form_group">
+							<label for="Name" th:text="#{s11Name}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="QueryName" name="QueryName"
+									ng-model="QueryName" class="form-control"
+									th:placeholder="#{s11Name}" autocomplete="off">
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<div class="form_group">
+							<label for="QueryIsExternalLink" th:text="#{s11IsExternalLink}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<select id="QueryIsExternalLink" name="QueryIsExternalLink"
+										ng-model="QueryIsExternalLink" class="form-control col-xs-6">
+									<option value="" selected th:text="#{all}"></option>
+									<option value="true" th:text="#{s11IsExternalLinkTrue}"></option>
+									<option value="false" th:text="#{s11IsExternalLinkFalse}"></option>
+								</select>
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<div class="form_group">
+							<label for="QueryIsEnable" th:text="#{isEnable}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<select id="QueryIsEnable" name="QueryIsEnable"
+										ng-model="QueryIsEnable" class="form-control col-xs-6">
+									<option value="" selected th:text="#{all}"></option>
+									<option value="true" th:text="#{isEnableTrue}"></option>
+									<option value="false" th:text="#{isEnableFalse}"></option>
+								</select>
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<div class="form_group">
+							<label for="QueryIsShow" th:text="#{isShow}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search">
+								<select id="QueryIsShow" name="QueryIsShow"
+										ng-model="QueryIsShow" class="form-control col-xs-6">
+									<option value="" selected th:text="#{all}"></option>
+									<option value="true" th:text="#{isShowTrue}"></option>
+									<option value="false" th:text="#{isShowFalse}"></option>
+								</select>
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<div class="form_group"></div>
+					</div>
+					<div class="help-block"></div>
+					<div class="submit_bar">
+						<button class="btn btn_custom btn_blue" type="button" ng-click="queryData()">
+							<i class="fas fa-fw fa-search"></i>
+							<th:block th:text="#{btnSearch}"></th:block>
+						</button>
+						<button class="btn btn_custom btn_gray" type="button" ng-click="clearData()">
+							<i class="fas fa-fw fa-redo-alt"></i>
+							<th:block th:text="#{btnReset}"></th:block>
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="thumbnail">
+				<div class="caption">
+					<img class="img-responsive" th:src="@{/images/icon_search.png}">
+					<h3 th:text="#{globalSearchResult}"></h3>
+					<a class="btn btn_custom btn_blue pull-right" type="button"
+							ng-click="openEdit()" th:if="${actionCreate}">
+						<i class="fas fa-fw fa-plus-circle"></i>
+						<th:block th:text="#{btnCreate}"></th:block>
+					</a>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-xs-12 col-md-6 no_padding">
+				<div class="help-block"></div>
+				<span th:replace="/include/table_row_select"></span>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="table-responsive">
+				<table class="table table-striped table-bordered table-hover table_customer table_gray">
+					<thead>
+						<th><a href="#" ng-click="setSortName('id')">
+							<th:block th:text="#{s11Id}"></th:block>
+							<i ng-show="sorttype != 'id'" class="fas fa-fw fa-sort text-muted"></i>
+							<i ng-show="sorttype == 'id' && !sortreverse" class="fas fa-fw fa-caret-down"></i>
+							<i ng-show="sorttype == 'id' && sortreverse" class="fas fa-fw fa-caret-up"></i>
+						</a></th>
+						<th><a href="#" ng-click="setSortName('subsystemName')">
+							<th:block th:text="#{s11subsystemName}"></th:block>
+							<i ng-show="sorttype != 'subsystemName'" class="fas fa-fw fa-sort text-muted"></i>
+							<i ng-show="sorttype == 'subsystemName' && !sortreverse" class="fas fa-fw fa-caret-down"></i>
+							<i ng-show="sorttype == 'subsystemName' && sortreverse" class="fas fa-fw fa-caret-up"></i>
+						</a></th>
+						<th><a href="#" ng-click="setSortName('name')">
+							<th:block th:text="#{s11Name}"></th:block>
+							<i ng-show="sorttype != 'name'" class="fas fa-fw fa-sort text-muted"></i>
+							<i ng-show="sorttype == 'name' && !sortreverse" class="fas fa-fw fa-caret-down"></i>
+							<i ng-show="sorttype == 'name' && sortreverse" class="fas fa-fw fa-caret-up"></i>
+						</a></th>
+
+						<th><a href="#" ng-click="setSortName('isExternalLink')">
+							<th:block th:text="#{s11IsExternalLink}"></th:block>
+							<i ng-show="sorttype != 'isExternalLink'" class="fas fa-fw fa-sort text-muted"></i>
+							<i ng-show="sorttype == 'isExternalLink' && !sortreverse" class="fas fa-fw fa-caret-down"></i>
+							<i ng-show="sorttype == 'isExternalLink' && sortreverse" class="fas fa-fw fa-caret-up"></i>
+						</a></th>
+						<th><a href="#" ng-click="setSortName('isEnable')">
+							<th:block th:text="#{isEnable}"></th:block>
+							<i ng-show="sorttype != 'isEnable'" class="fas fa-fw fa-sort text-muted"></i>
+							<i ng-show="sorttype == 'isEnable' && !sortreverse" class="fas fa-fw fa-caret-down"></i>
+							<i ng-show="sorttype == 'isEnable' && sortreverse" class="fas fa-fw fa-caret-up"></i>
+						</a></th>
+						<th><a href="#" ng-click="setSortName('isShow')">
+							<th:block th:text="#{isShow}"></th:block>
+							<i ng-show="sorttype != 'isShow'" class="fas fa-fw fa-sort text-muted"></i>
+							<i ng-show="sorttype == 'isShow' && !sortreverse" class="fas fa-fw fa-caret-down"></i>
+							<i ng-show="sorttype == 'isShow' && sortreverse" class="fas fa-fw fa-caret-up"></i>
+						</a></th>
+						<th><a href="#" ng-click="setSortName('sort')">
+							<th:block th:text="#{sort}"></th:block>
+							<i ng-show="sorttype != 'sort'" class="fas fa-fw fa-sort text-muted"></i>
+							<i ng-show="sorttype == 'sort' && !sortreverse" class="fas fa-fw fa-caret-down"></i>
+							<i ng-show="sorttype == 'sort' && sortreverse" class="fas fa-fw fa-caret-up"></i>
+						</a></th>
+						<th th:if="${actionUpdate && actionDelete}" class="func">&nbsp;</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="item in allitems">
+							<td>{{item.Id}}</td>
+							<td>{{item.SubsystemName}}</td>
+							<td>{{item.Name}}</td>
+							<td>{{item.IsExternalLink==true?"Y":"N"}}</td>
+							<td class="text-center">
+								<span ng-show="{{item.IsEnable}}">
+									<i class="far fa-fw fa-check-circle text-success" th:title="#{isEnableTrue}"></i>
+									<th:block th:text="#{isEnableTrue}"></th:block>									
+								</span>
+								<span ng-show="{{!item.IsEnable}}">
+									<i class="fas fa-fw fa-minus-circle text-danger" th:title="#{isEnableFalse}"></i>
+									<th:block th:text="#{isEnableFalse}"></th:block>									
+								</span>
+							</td>
+							<td class="text-center">
+								<span ng-show="{{item.IsShow}}">
+									<i class="far fa-fw fa-check-circle text-success" th:title="#{isShowTrue}"></i>
+									<th:block th:text="#{isShowTrue}"></th:block>									
+								</span>
+								<span ng-show="{{!item.IsShow}}">
+									<i class="far fa-fw fa-check-circle text-success" th:title="#{isShowFalse}"></i>
+									<th:block th:text="#{isShowFalse}"></th:block>									
+								</span>
+							</td>
+							<td class="text-right">{{item.Sort}}</td>
+							<td th:if="${actionUpdate && actionDelete}" class="text-center">
+								<a class="btn btn-sm btn-primary" ng-click="editData(item.Id);"
+										th:title="#{btnEdit}" th:if="${actionUpdate}">
+									<i class="fas fa-fw fa-edit"></i>
+									<th:block th:text="#{btnEdit}"></th:block>									
+								</a>
+								<br />
+								<a href="#" class="btn btn-sm btn-info"
+										ng-click="deleteData(item.Id);" th:if="${actionDelete}">
+									<i class="far fa-fw fa-trash-alt"></i>
+									<th:block th:text="#{btnDelete}"></th:block>									
+								</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			
+			<span th:replace="/include/table_row_empty"></span>
+			<div class="text-center">
+				<paging class="pagination" page="currentPage" page-size="maxRows"
+					total="total" show-prev-next="true" show-first-last="true"
+					text-next-class="fas fa-step-forward"
+					text-prev-class="fas fa-step-backward"
+					text-first-class="fas fa-fast-backward"
+					text-last-class="fas fa-fast-forward"
+					paging-action="queryData(page)"></paging>
+			</div>
+		</div>
+	</div>
+
+	<div id="divEdit" class="container" ng-show="btnIns || btnUpd">
+		<div class="row">
+			<h4 class="form_heading form_heading_fix form_heading_gray" ng-show="btnIns">
+				<big><i class="fas fa-fw fa-plus-circle fa-lg"></i></big>
+				<b th:text="#{btnCreate}"></b>
+			</h4>
+			<h4 class="form_heading form_heading_fix form_heading_gray" ng-show="btnUpd">
+				<big><i class="fas fa-fw fa-edit fa-lg"></i></big>
+				<b th:text="#{btnEdit}"></b>
+			</h4>
+			<div class="col-xs-12 shadow_board">
+				<form name="editForm">
+					<div>
+						<div class="form_group">
+							<label for="SubsystemName" class="form_label form_label_search form_label_gray">
+								<p style="font-size:10px; color:red; display:inline;">(*必填)</p>
+								<th:block th:text="#{s11subsystemName}"></th:block>
+							</label>
+							<div class="form_input form_input_search">
+								<select id=SubsystemId name="SubsystemId" ng-model="SubsystemId"
+									class="form-control col-xs-6"
+									ng-options="Subsystem.Id as Subsystem.Id+':'+Subsystem.Name  for  Subsystem in subsystems"
+									ng-required="true">
+									<option value="" selected th:text="#{s11Select}"></option>
+								</select>
+								<h5 class="text-danger" th:text="#{pleaseEnter}+#{subsystemName}"
+									ng-show="editForm.Name.$error.required && editForm.Name.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<div class="form_group">
+							<label for="Name" class="form_label form_label_search form_label_gray">
+								<p style="font-size:10px; color:red; display:inline;">(*必填)</p>
+								<th:block th:text="#{s11Name}"></th:block>
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="Name" name="Name" ng-model="Name"
+									class="form-control" th:placeholder="#{s11Name}"
+									ng-maxlength="2147483647" autocomplete="off" ng-required="true">
+								<h5 class="text-danger" th:text="#{pleaseEnter}+#{s11Name}"
+									ng-show="editForm.Name.$error.required && editForm.Name.$dirty">
+								</h5>
+								<h5 class="text-danger" th:text="#{formatMaxLengthAfter(2147483647)}"
+									ng-show="editForm.Name.$error.maxlength && editForm.Name.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<div class="form_group">
+							<label for="Code" class="form_label form_label_search form_label_gray">
+								<p style="font-size:10px; color:red; display:inline;">(*必填)</p>
+								<th:block th:text="#{s11Code}"></th:block>
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="Code" name="Code" ng-model="Code"
+									class="form-control" th:placeholder="#{s11Code}"
+									ng-maxlength="32" autocomplete="off" ng-required="true" />
+								<h5 class="text-danger" th:text="#{pleaseEnter}+#{s11Code}"
+									ng-show="editForm.Code.$error.required && editForm.Code.$dirty">
+								</h5>
+								<h5 class="text-danger" th:text="#{formatMaxLengthAfter(32)}"
+									ng-show="editForm.Code.$error.maxlength && editForm.Code.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<div class="form_group">
+							<label for="ControllerName" class="form_label form_label_search form_label_gray">
+								<p style="font-size:10px; color:red; display:inline;">(*必填)</p>
+								<th:block th:text="#{s11ControllerName}"></th:block>
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="ControllerName" name="ControllerName"
+									ng-model="ControllerName" class="form-control"
+									th:placeholder="#{s11ControllerName}"
+									ng-maxlength="64" autocomplete="off" ng-required="true">
+								<h5 class="text-danger" th:text="#{pleaseEnter}+#{s11ControllerName}"
+									ng-show="editForm.ControllerName.$error.required && editForm.ControllerName.$dirty">
+								</h5>
+								<h5 class="text-danger" th:text="#{formatMaxLengthAfter(64)}"
+									ng-show="editForm.ControllerName.$error.maxlength && editForm.ControllerName.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+					<div>
+						<div class="form_group">
+							<label for="ActionName" class="form_label form_label_search form_label_gray">
+								<p style="font-size:10px; color:red; display:inline;">(*必填)</p>
+								<th:block th:text="#{s11ActionName}"></th:block>
+							</label>
+							<div class="form_input form_input_search">
+								<input type="text" id="ActionName" name="ActionName"
+									ng-model="ActionName" class="form-control"
+									th:placeholder="#{s11ActionName}"
+									ng-maxlength="64" autocomplete="off" ng-required="true">
+								<h5 class="text-danger" th:text="#{pleaseEnter}+#{s11ActionName}"
+									ng-show="editForm.ActionName.$error.required && editForm.ActionName.$dirty">
+								</h5>
+								<h5 class="text-danger" th:text="#{formatMaxLengthAfter(64)}"
+									ng-show="editForm.ActionName.$error.maxlength && editForm.ActionName.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<div class="form_group">
+							<label for="IsExternalLink" th:text="#{s11IsExternalLink}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search_half">
+								<toggle ng-model="IsExternalLink" ng-init="IsExternalLink=true"
+									on='<i class="far fa-fw fa-check-circle"></i>Y'
+									off='<i class="fas fa-fw fa-minus-circle"></i>N'
+									onstyle="btn-success" offstyle="btn-danger"></toggle>
+							</div>
+
+							<label for="IsShow" th:text="#{isShow}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search_half">
+								<toggle ng-model="IsShow" ng-init="IsShow=true"
+									th:on="#{toggleIsShowTrue}"
+									th:off="#{toggleIsShowFalse}"
+									onstyle="btn-success" offstyle="btn-danger"></toggle>
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<div class="form_group">
+							<label for="IsEnable" th:text="#{isEnable}"
+								class="form_label form_label_search form_label_gray">
+							</label>
+							<div class="form_input form_input_search_half">
+								<toggle ng-model="IsEnable" ng-init="IsEnable=true"
+									th:on="#{toggleIsEnableTrue}"
+									th:off="#{toggleIsEnableFalse}"
+									onstyle="btn-success" offstyle="btn-danger"></toggle>
+							</div>
+							<label for="Sort" class="form_label form_label_search form_label_gray">
+								<p style="font-size:10px; color:red; display:inline;">(*必填)</p>
+								<th:block th:text="#{sort}"></th:block>
+							</label>
+							<div class="form_input form_input_search_half">
+								<input type="number" id="Sort" name="Sort" ng-model="Sort"
+									class="form-control" th:placeholder="#{sort}"
+									autocomplete="off" pattern="[0-9]*" inputmode="numeric" min="0"
+									onkeypress="var key = window.event ? event.keyCode : event.which; return (key >= 48 && key <= 57) || key == 8"
+									ng-required="true" ng-maxlength="4" />
+								<h5 class="text-danger" th:text="#{pleaseEnter}+#{sort}"
+									ng-show="editForm.Sort.$error.required && editForm.Sort.$dirty">
+								</h5>
+								<h5 class="text-danger" th:text="#{formatMaxLengthAfter(4)}"
+									ng-show="editForm.Sort.$error.maxlength && editForm.Sort.$dirty">
+								</h5>
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<div class="form_group"></div>
+					</div>
+					<div class="help-block"></div>
+					
+					<div class="submit_bar">
+						<button class="btn btn_custom btn_blue" type="button"
+							ng-click="!editForm.$valid || createData()"
+							ng-disabled="!editForm.$valid"
+							ng-show="LocalActionCreate && btnIns">
+							<i class="fas fa-fw fa-save"></i>
+							<th:block th:text="#{btnSave}"></th:block>
+						</button>
+						<button class="btn btn_custom btn_blue" type="button"
+							ng-click="!editForm.$valid || updateData()"
+							ng-disabled="!editForm.$valid"
+							ng-show="LocalActionUpdate && btnUpd">
+							<i class="fas fa-fw fa-save"></i>
+							<th:block th:text="#{btnSave}"></th:block>
+						</button>
+						<button class="btn btn_custom btn_gray" type="button" ng-click="closeEdit()">
+							<i class="fas fa-fw fa-undo"></i>
+							<th:block th:text="#{btnReturn}"></th:block>
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	<div class="footer_space"></div>
+	<footer th:replace="/include/footer :: commonFooter"></footer>
+</body>
+</html>

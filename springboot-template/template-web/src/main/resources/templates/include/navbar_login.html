@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<nav th:fragment="navbarLogin">
+	<div class="logbar">
+		<div class="container">
+			<div class="navbar-collapse">
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown">
+						<a href="" class="logbtn" data-toggle="modal" data-target="#login">
+							<span th:text="#{loginTitle}"></span>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="navbar" style="margin-bottom: 20px;">
+		<div class="container">
+			<div class="navbar-collapse">
+				<!-- Logo -->
+				<a th:href="@{/index}">
+					<ul class="nav navbar-nav">
+						<li class="logo">
+							<img class="img-responsive" th:src="@{/images/logo.svg}" />
+							<span></span>
+						</li>
+						<li class="" style="margin-left: .5rem;">
+							<div class="logo-center" style="height: 90px;color:#fff;">
+								<h2 style="font-size: 20px;margin: 0;font-weight: bold;" th:text="#{globalMainRegion}+#{globalMainTitle}"></h2>
+								<h4 style="font-size: 18px;margin: 0;" th:text="#{globalSubTitle}"></h4>
+							</div>
+						</li>
+					</ul>
+				</a>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="login" role="dialog" ng-controller="getAppController">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"></button>
+					<div class="title-icon">
+						<img th:src="@{/images/login-title.svg}">
+					</div>
+					<span class="modal-title" th:text="#{loginTitle}"></span>
+				</div>
+				<div class="modal-body">
+					<form name="myForm" method="post">
+						<div class="form-group">
+							<label for="account" th:text="#{loginName}"></label>
+							<input type="text" id="userName" name="userName" ng-model="userName"
+								th:placeholder="#{pleaseEnter} + #{loginName}"
+								autocomplete="off" autofocus ng-required="true"
+								ng-disabled="showTwoFactor" class="form-control">
+						</div>
+						<div class="form-group">
+							<label for="password" th:text="#{loginCode}"></label>
+							<input type="password" id="userCode" name="userCode" ng-model="userCode"
+								th:placeholder="#{pleaseEnter}+ #{loginCode}"
+								autocomplete="off" ng-required="true" ng-disabled="showTwoFactor"
+								class="form-control">
+						</div>
+						<div class="form-group" id="divgtpCode" ng-show="showTwoFactor" style="display: none;">
+							<label for="g-code"></label>
+							<div class="pull-right">
+								<div class="g-recaptcha" th:data-sitekey="${googleRecaptchaSiteKey}"></div>
+							</div>
+						</div>
+						<div class="form-group">
+							<a class="btn btm-submit" type="button"
+								ng-click="!myForm.userName.$valid || !myForm.userCode.$valid || login()"
+								ng-disabled="!myForm.userName.$valid || !myForm.userCode.$valid">
+								<span th:text="#{loginSubmit}"></span>
+							</a>
+						</div>
+						<div class="form-group">
+							<a th:href="@{/forgot}" type="button" class="btn btn-forget pull-right">
+								<span th:text="#{globalForgotCode}"></span>
+							</a>
+						</div>
+					</form>
+	
+				</div>
+			</div>
+		</div>
+	</div>
+
+</nav>
+</html>
+

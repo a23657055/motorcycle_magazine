@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head th:replace="/include/head_index :: headIndex(#{globalHomepage})"></head>
+<script type="text/javascript">
+	var loginResend = "[[#{loginResend}]]";
+	var loginResendFail = "[[#{loginResendFail}]]";
+</script>
+<script type="text/javascript" th:src="@{/js/forgot.js}"></script>	
+
+<body ng-app="myApp">
+	<nav th:replace="/include/navbar_home :: navbarHome"></nav>
+
+	<div ng-controller="getAppController" class="container">
+		<div class="row">
+			<div class="col-sm-offset-3 col-sm-6 shadow_board">
+				<div class="thumbnail">
+					<div class="caption">
+						<img class="img-responsive" th:src="@{/images/icon_profiles.png}">
+						<h3 th:text="#{globalForgotCode}"></h3>
+					</div>
+				</div>
+				<form name="myForm">
+					<div>
+						<div class="form_group">
+							<label for="userName" class="form_label form_label_gray" th:text="#{loginName}"></label>
+							<div class="form_input">
+								<input type="text" id="userName" name="userName" ng-model="userName"
+									th:placeholder="#{pleaseEnter} + #{loginName}"
+									autocomplete="off" autofocus ng-required="true"
+									class="form-control">
+								<h5 class="text-danger" ng-show="myForm.userName.$invalid && myForm.userName.$dirty">
+									<span th:text="#{pleaseEnter} + #{loginName}"></span>
+								</h5>
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<div class="form_group">
+							<label for="userEmail" class="form_label form_label_gray" th:text="#{loginSignUpEmail}"></label>
+							<div class="form_input">
+								<input type="email" id="userEmail" name="userEmail"	ng-model="userEmail"
+									th:placeholder="#{pleaseEnter} + #{loginSignUpEmail}"
+									autocomplete="off" ng-required="true" class="form-control">
+								<h5 class="text-danger"	ng-show="myForm.userEmail.$invalid && myForm.userEmail.$dirty">
+									<span th:text="#{pleaseEnter} + #{loginSignUpEmail}"></span>
+								</h5>
+							</div>
+						</div>
+					</div>
+					
+					<div class="help-block"></div>
+					
+					<div id="divSubmit" class="btn-group btn-group-justified" role="group">
+						<a class="btn btn_custom btn_pink" type="button"
+							ng-click="!myForm.$valid || resend()" ng-disabled="!myForm.$valid">
+							<i class="fas fa-fw fa-envelope"></i>
+							<span th:text="#{loginResendEmail}"></span>
+						</a>
+					</div>
+				
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	<div class="footer_space"></div>
+	<footer th:replace="/include/footer :: commonFooter"></footer>
+</body>
+</html>

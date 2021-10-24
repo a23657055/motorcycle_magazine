@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+<nav th:fragment="navbarCommon">
+	<div class="logbar" style="height: auto;">
+		<div class="container">
+			<div class="navbar-collapse">
+				<ul class="nav navbar-nav navbar-right" id="logdropdown">
+					<li class="dropdown">
+						<a href="" class="logbtn dropdown-toggle" data-toggle="dropdown"
+							role="button" aria-haspopup="true" aria-expanded="false">
+							<span th:text="${memberName}"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<a th:href="@{/sys/edit_profile}">
+									<span th:text="#{globalEditPorfile}"></span>
+								</a>
+							</li>
+							<li>
+								<a th:href="@{/sys/change_code}">
+									<span th:text="#{globalChangeCode}"></span>
+								</a>
+							</li>
+							<li role="separator" class="divider"></li>
+							<li>
+<!-- 								<a href="#" onclick="logout();"> -->
+<!-- 									<i class="fas fa-fw fa-sign-out-alt"></i> -->
+<!-- 									<span th:text="#{globalLogout}"></span> -->
+<!-- 								</a> -->
+								<a th:href="@{/logout}">
+									<i class="fas fa-fw fa-sign-out-alt"></i>
+									<span th:text="#{globalLogout}"></span>
+								</a>
+							</li>	
+						</ul>
+					</li>
+				</ul>
+				
+				<div th:if="${memberRoles!=null && (#lists.size(memberRoles) gt 1)}">
+					<ul class="nav navbar-nav navbar-right" id="logdropdown">
+						<li class="dropdown">
+							<a href="#" class="logbtn dropdown-toggle" data-toggle="dropdown"
+									role="button" aria-haspopup="true" aria-expanded="false">
+								<span class="changeRole">
+									<i class="fa fa-users"></i>
+									切換角色 (<th:block th:each="memberRole : ${memberRoles}">
+										<th:block th:if="${memberRole.IsEnable}">
+											<label th:if="${memberRole.roleId==1}">SuperAdmin</label>
+											<label th:if="${memberRole.roleId==7}">權責單位警訊審核者</label>	
+											<label th:if="${memberRole.roleId==8}">權責單位聯絡人</label>	
+											<label th:if="${memberRole.roleId==9}">權責單位管理者</label>	
+											<label th:if="${memberRole.roleId==10}">會員單位聯絡人</label>	
+											<label th:if="${memberRole.roleId==11}">會員單位管理者</label>	
+											<label th:if="${memberRole.roleId==15}">權責單位通報審核者</label>	
+										</th:block>
+									</th:block>)
+									<i class="fas fa-fw fa-caret-down"></i>
+								</span>
+							</a>
+							<ul class="dropdown-menu">
+								<th:block th:each="memberRole : ${memberRoles}">
+									<th:block th:if="${!memberRole.IsEnable}">
+										<li th:if="${memberRole.roleId == 1}"><a href="#" onclick="changeRole(1)">SuperAdmin</a></li>
+										<li th:if="${memberRole.roleId == 7}"><a href="#" onclick="changeRole(7)">權責單位警訊審核者</a></li>
+										<li th:if="${memberRole.roleId == 8}"><a href="#" onclick="changeRole(8)">權責單位聯絡人</a></li>
+										<li th:if="${memberRole.roleId == 9}"><a href="#" onclick="changeRole(9)">權責單位管理者</a></li>
+										<li th:if="${memberRole.roleId == 10}"><a href="#" onclick="changeRole(10)">會員單位聯絡人</a></li>
+										<li th:if="${memberRole.roleId == 11}"><a href="#" onclick="changeRole(11)">會員單位管理者</a></li>
+										<li th:if="${memberRole.roleId == 15}"><a href="#" onclick="changeRole(15)">權責單位通報審核者</a></li>
+									</th:block>								
+								</th:block>
+							</ul>
+						</li>
+					</ul>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+
+	<div class="navbar navbar-default" style="margin-bottom: 20px;">
+		<div class="container">
+			<div class="navbar-header navbar-right">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+						data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="hamburger">
+						<img th:src="@{/images/menu.svg}">
+					</span>
+					<span class="cross">
+						<img th:src="@{/images/menu-close.svg}">
+					</span>
+				</button>
+			</div>
+			<div class="navbar-collapse">
+				<!-- Logo -->
+				<a th:href="@{/pub/index}">
+					<ul class="nav navbar-nav">
+						<li class="logo">
+							<img class="img-responsive" th:src="@{/images/logo.svg}">
+							<span></span>
+						</li>
+						<li class="logo-title">
+							<div class="logo-center">
+								<h2 style="font-size: 20px;" th:text="#{globalMainRegion}+#{globalMainTitle}"></h2>
+								<h4 style="font-size: 18px;" th:text="#{globalSubTitle}"></h4>
+							</div>
+						</li>
+					</ul>
+				</a>
+
+				<ul id="navbar" class="nav navbar-nav navbar-right collapse navbar-collapse navbar-fixed-top">
+				
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		function changeRole(roleId) {
+			$.ajax({
+				type : 'POST',
+				url : '[[@{/public/api/changeRole}]]',
+				data : JSON.stringify({
+					RoleId : roleId
+				}),
+				contentType : "application/json; charset=utf-8",
+				dataType : "json",
+				headers : header
+			}).done(function(response) {
+// 				what is webSiteUrl
+// 				location.replace(response.webSiteUrl)
+			});
+		}
+		
+		$(document).ready(function() {
+			
+			$(".menu_bar_toggle").show();
+			
+			function b64DecodeUnicode(str) {
+				return decodeURIComponent(Array.prototype.map.call(
+						atob(str),
+						function(c) {
+							return '%' + ('00' +
+									c.charCodeAt(0).toString(16)).slice(-2)
+						}).join('')
+				);
+			}
+			
+			function escapeXml(unsafe) {
+				return unsafe.replace(/[<>&'"]/g,
+						function(c) {
+							switch (c) {
+								case '<':
+									return '&lt;';
+								case '>':
+									return '&gt;';
+								case '&':
+									return '&amp;';
+								case '\'':
+									return '&apos;';
+								case '"':
+									return '&quot;';
+							}
+						}
+				);
+			}
+			
+			function makeUL(lst, topLevelUl, rootLvl) {
+				var html = [];
+				if (topLevelUl) {
+					html.push('<ul class="nav navbar-nav navbar-right collapse navbar-collapse navbar-fixed-top" id="navbar">');
+					topLevelUl = false;
+				} else {
+					html.push('<ul class="dropdown-menu">');
+				}
+				$(lst).each(function() {
+					html.push(makeLI(this, topLevelUl, rootLvl))
+				});
+				html.push('</ul>');
+				rootLvl = true;
+				return html.join("\n");
+			}
+			
+			function makeLI(elem, topLevelUl, rootLvl) {				
+				var html = [];
+				if (!rootLvl) {
+					html.push('<li>');
+				} else {
+					html.push('<li class="dropdown">');
+					rootLvl = false;
+				}
+				if (elem.value) {
+					if (elem.separator == true) {
+						html.push('<li role="separator" class="divider">');
+					} else {
+						if (elem.target) {
+							html.push('<a href="'+
+									+ escapeXml(elem.value)
+									+ '" target="_'
+									+ escapeXml(elem.target)
+									+ '">'
+									+ escapeXml(elem.link)
+									+ '</a>');
+						} else {
+							html.push('<a href="'
+									+ escapeXml(elem.value)
+									+ '">'
+									+ escapeXml(elem.link)
+									+ ' <span id="'
+									+ escapeXml(elem.code)
+									+ '" class="badge"></span></a>');
+						}
+					}
+				} else {
+					html.push('<a id="'
+							+ escapeXml(elem.code)
+							+ '" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">'
+							+ escapeXml(elem.link)
+							+ ' <span id="'
+							+ escapeXml(elem.code)
+							+ '" class="badge"></span>'
+							+ '<span class="toggle-icon toggle-icon-plus"></span></a>');
+				}
+				if (elem.children) {
+					html.push(makeUL(elem.children, topLevelUl, rootLvl));
+				}
+				html.push('</li>');
+				return html.join("\n");
+			}
+			
+			$(function() {
+				var topLevelUl = true;
+				var menuJson = "[[${ menuJson }]]";
+				$("#navbar").replaceWith(
+						makeUL(
+							JSON.parse(b64DecodeUnicode(menuJson)).menu,
+							topLevelUl,
+							true
+						)
+				);
+				$('ul.nav li.dropdown').hover(
+						function() {
+							if ($(window).width() >= 1200) {
+								$(this).find('.logbtn').css({
+									'opacity' : '0.8',
+									'filter' : 'alpha(opacity=80)'
+								});
+								$(this).find('.dropdown-toggle')
+										.css('background',
+												'#0069c0');
+								$(this).find('.dropdown-menu')
+										.stop(true, true).fadeIn(
+												200);
+							}
+						},
+						function() {
+							if ($(window).width() >= 1200) {
+								$(this).find('.logbtn').css({
+									'opacity' : '1',
+									'filter' : 'alpha(opacity=100)'
+								});
+								$(this).find('.dropdown-toggle')
+										.css('background', '0');
+								$(this).find('.dropdown-menu')
+										.stop(true, true).fadeOut(
+												200);
+							}
+						}
+				);
+				
+				if ($(window).width() < 1200) {
+					// navbar mobile 調整寬度
+					$('#navbar').find('.dropdown-toggle').addClass('container');
+					$('#navbar').find('.dropdown-menu a').addClass('container');
+					// mobile開啟menu，點擊login dropdown自動關閉menu
+					$('#logdropdown .dropdown-toggle').click(function() {
+						if ($('#navbar').hasClass('in')) {
+							$('#navbar').removeClass('in');		// 關閉menu
+							$('.navbar-default .navbar-toggle')
+								.addClass('collapsed');			// menu icon變回hamburger
+						}									
+					});
+				}
+				
+				$('.list-group-vertical').each(function() {
+					$(this).find('.list-group-item:visible:last')
+							.css('padding-right','0');
+				});
+				
+				$("#subsystem_[[${controllerName.toLowerCase()}]]").addClass("subsystem");
+				
+				var request = {
+						"a" : Math.random().toString(36).substring(2, 15)
+				}
+				
+				//#subsystem_sys if begin
+				if ($("#subsystem_sys").length > 0) {
+					var subsystem_sys_count = 0;
+					if ($("#form_sign_apply").length > 0) {
+						$.ajax({
+							url : "[[@{/pub/api/count/member_sign}]]",
+							method : "POST",
+							data : request,
+							headers : header,
+							datatype : "json",
+							async : false
+						}).done(function(response) {
+							var count = response.count;
+							if (count > 0) {
+								$("#form_sign_apply").html(count);
+								subsystem_sys_count = subsystem_sys_count+ count;
+							}
+						});
+					}
+
+					if (subsystem_sys_count > 0) {
+						$("#subsystem_sys > .badge").html(subsystem_sys_count);
+					}
+				}
+				//#subsystem_sys if end
+
+			});
+			
+		});
+		
+		$(window).resize(function() {
+			if ($(window).width() < 1200) {
+				// navbar mobile 調整寬度
+				$('#navbar').find('.dropdown-toggle').addClass('container');
+				$('#navbar').find('.dropdown-menu a').addClass('container');
+				// mobile開啟menu，點擊login dropdown自動關閉menu
+				$('#logdropdown .dropdown-toggle').click(function() {
+					if ($('#navbar').hasClass('in')) {
+						$('#navbar').removeClass('in'); // 關閉menu
+						$('.navbar-default .navbar-toggle').addClass('collapsed'); // menu icon變回hamburger
+					}
+				});
+			} else {
+				// navbar mobile 調整寬度
+				$('#navbar').find('.dropdown-toggle').removeClass('container');
+				$('#navbar').find('.dropdown-menu a').removeClass('container');
+			}
+		});
+	</script>
+</nav>
+</html>
+

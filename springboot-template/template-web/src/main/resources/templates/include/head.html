@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head th:fragment="commonHead(title)">
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async
+	th:src="${'https://www.googletagmanager.com/gtag/js?id=' + @environment.getProperty('google.gtag.id')}"></script>
+<title th:text="#{globalSiteName} + ' - ' + ${appName}">Title</title>
+<meta name="copyright" th:content="#{globalCopyright}">
+<meta name="robots" content="noindex,nofollow">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="refresh" content="600" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+<meta http-equiv="Pragma" content="no-store">
+<meta http-equiv="Cache-Control" content="no-store">
+<meta http-equiv="Expires" content="0">
+<meta name="_csrf_token" th:if="${_csrf!=null}" th:content="${_csrf.token}" />
+<meta name="_csrf_header" th:if="${_csrf!=null}" th:content="${_csrf.headerName}" />
+<meta http-equiv="Content-Security-Policy" content="">
+<link rel="apple-touch-icon" sizes="120x120" th:href="@{/apple-touch-icon.png}">
+<link rel="icon" type="image/png" sizes="32x32" th:href="@{/favicon-32x32.png}">
+<link rel="icon" type="image/png" sizes="16x16" th:href="@{/favicon-16x16.png}">
+<link rel="manifest" th:href="@{/site.webmanifest}">
+<link rel="mask-icon" th:href="@{/safari-pinned-tab.svg}" color="#5bbad5">
+
+<link rel="shortcut icon" th:href="@{/favicon.ico}" type="image/x-icon" />
+<link rel="shortcut icon" th:href="@{/favicon.ico}" type="image/vnd.microsoft.icon" />
+
+<link rel="stylesheet" th:href="@{/plugins/bootstrap/css/bootstrap.min.css}">
+<link rel="stylesheet" th:href="@{/plugins/bootstrap/css/bootstrap-theme.min.css}">
+<link rel="stylesheet" th:href="@{/plugins/fontawesome/css/fontawesome-all.min.css}">
+<link rel="stylesheet" th:href="@{/css/ie10-viewport-bug-workaround.css}">
+<link rel="stylesheet" th:href="@{/css/default.css}">
+<link rel="stylesheet" th:href="@{/css/custom.css}">
+<link rel="stylesheet" th:href="@{/css/bootstrap-datetimepicker.min.css}">
+<link rel="stylesheet" th:href="@{/plugins/angular-bootstrap-toggle/angular-bootstrap-toggle.min.css}">
+	
+<script th:src="@{/plugins/html5shiv.min.js}"></script>
+<script th:src="@{/plugins/respond.min.js}"></script>
+<script th:src="@{/plugins/jquery.min.js}"></script>
+<script th:src="@{/plugins/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/plugins/bootbox.min.js}"></script>
+<script th:src="@{/plugins/angular/angular.min.js}"></script>
+<script th:src="@{/plugins/angular/angular-cookies.min.js}"></script>
+	
+<script th:src="@{/plugins/angular-bootstrap-toggle/angular-bootstrap-toggle.min.js}"></script>
+<script th:src="@{/plugins/moment.min.js}"></script>
+<script th:src="@{/plugins/moment.locales.min.js}"></script>
+<script th:src="@{/plugins/bootstrap-datetimepicker.min.js}"></script>
+<script th:src="@{/plugins/ng-file-upload/ng-file-upload-shim.min.js}"></script>
+<script th:src="@{/plugins/ng-file-upload/ng-file-upload.min.js}"></script>
+<script th:src="@{/plugins/paging.js}"></script>
+<script th:src="@{/plugins/FileSaver.js}"></script>
+
+<script th:src="@{/plugins/ie10-viewport-bug-workaround.js}"></script>
+
+<script type="text/javascript">
+	var header = JSON.parse('{"'
+			+ $("meta[name='_csrf_header']").attr("content") + '":"'
+			+ $("meta[name='_csrf_token']").attr("content") + '"}');
+	var csrf_config = {
+		withCredentials : true,
+		crossDomain : true,
+		headers : header
+	};
+
+	var headerForm = JSON.parse('{"Content-Type" : "application/x-www-form-urlencoded;charset=utf-8;","'
+			+ $("meta[name='_csrf_header']").attr("content") + '":"'
+			+ $("meta[name='_csrf_token']").attr("content") + '"}');
+	var csrf_config_form = {
+		withCredentials : true,
+		crossDomain : true,
+		headers : headerForm
+	};
+	
+	var sessionTimeout = 1 * [[${#session.maxInactiveInterval}]] * 1;
+	var notifyBefore = 60 * [[${beforeSessionTimeoutMinutes}]] * 1;
+	if (notifyBefore > sessionTimeout)
+		notifyBefore = sessionTimeout;
+	var checkConfirm = null;
+	var checkAutoLogout = null;
+	var showTimeoutSeconds = null;
+	var timeoutSeconds = 0;
+	var timeout_message = "[[#{globalTimeout}]]";
+	
+	function confirmTimeout() {
+		clearInterval(checkConfirm);
+		timeoutSeconds = notifyBefore;
+		clearInterval(showTimeoutSeconds);
+		bootbox.dialog({
+			message : timeout_message.replace('{0}', sessionTimeout),
+			closeButton : false,
+			buttons : {
+				ok : {
+					label : '[[#{globalContinue}]]',
+					className : 'btn-warning',
+					callback : function(result) {
+						$.ajax({
+							type : 'POST',
+							url : '[[@{/public/api/resetTimeout}]]',
+							data : {},
+							dataType : 'json',
+							headers : header
+						}).done(function() {
+							resetTimeout();
+						});
+					}
+				},
+				logout : {
+					label : '[[#{globalLogout}]]',
+					className : 'btn-danger',
+					callback : function(result) {
+						logout();
+					}
+				}
+			}
+		});
+		setTimeoutSeconds();
+	}
+	
+	function setTimeoutSeconds() {
+		var startTimeout = moment().add(timeoutSeconds, 'seconds');
+		showTimeoutSeconds = setInterval(function() {
+			timeoutSeconds = Math.floor(moment.duration(startTimeout.diff(moment())) / 1000);
+			if (timeoutSeconds <= 0) {
+				timeoutSeconds = 0;
+			}
+			$(".modal-body").html(timeout_message.replace('{0}', sessionTimeout));
+		}, 500);
+	}
+
+	function autoLogout() {
+		logout();
+	}
+
+	function resetTimeout() {
+		clearInterval(checkConfirm);
+		clearInterval(checkAutoLogout);
+		checkConfirm = setInterval(confirmTimeout,
+				(sessionTimeout - notifyBefore) * 1000);
+		checkAutoLogout = setInterval(autoLogout, sessionTimeout * 1000);
+	}
+
+	function logout() {
+		location.href = "[[@{/logout}]]";
+	}
+
+	$(document).ready(function() {
+		resetTimeout();
+		$("#gotop").click(function() {
+			$("html, body").animate({
+				scrollTop : 0
+			}, 600);
+			return false;
+		});
+	});
+	
+	var globalReadDataFail = "[[#{globalReadDataFail}]]";
+	var btnClose = "[[#{btnClose}]]";
+	var btnSure = "[[#{btnSure}]]";
+	var globalSureDeleteItem = "[[#{globalSureDeleteItem}]]";
+	var globalDeleteDataFail = "[[#{globalDeleteDataFail}]]";
+	var globalInsertDataFail = "[[#{globalInsertDataFail}]]";
+	var globalUpdateDataFail = "[[#{globalUpdateDataFail}]]";
+	var dataLoading = "[[#{dataLoading}]]";
+	var dataUpdating = "[[#{dataUpdating}]]";
+</script>
+
+
+</head>
+</html>
